@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: auth-service
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled:
+        true
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      default-topic: student-topic
+    producer:
+      spring.json.add.type.headers: false
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+server:
+  port: 8082
+keycloak:
+  server-url: http://localhost:8080
+  realm: universitymanagementrealm
+  client-id: university_client
+  client-secret: CCLqRQlTzSOWbLxWs7NG83XhEatwTWQK
+  admin-username: admin
+  admin-password: admin
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
