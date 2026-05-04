@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="auth-service" />
+        <module name="Attendance-Service" />
+        <module name="apigateway-service" />
+        <module name="department-service" />
+        <module name="notificationcommunication-service" />
+        <module name="student-service" />
+        <module name="faculty-service" />
+        <module name="events" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kafkaevents" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Attendance-Service" options="-parameters" />
+      <module name="apigateway-service" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="auth-service.main" options="-parameters" />
+      <module name="auth-service.test" options="-parameters" />
+      <module name="department-service" options="-parameters" />
+      <module name="events" options="-parameters" />
+      <module name="faculty-service" options="-parameters" />
+      <module name="kafkaevents" options="-parameters" />
+      <module name="notificationcommunication-service" options="-parameters" />
+      <module name="student-service" options="-parameters" />
+    </option>
+  </component>
+</project>
