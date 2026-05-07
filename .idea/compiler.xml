@@ -6,7 +6,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="course-service" />
         <module name="auth-service" />
         <module name="Attendance-Service" />
         <module name="apigateway-service" />
@@ -15,10 +14,11 @@
         <module name="student-service" />
         <module name="faculty-service" />
         <module name="events" />
-        <module name="enrollment-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="course-service" target="21" />
+      <module name="enrollment-service" target="21" />
       <module name="kafkaevents" target="21" />
     </bytecodeTargetLevel>
   </component>
