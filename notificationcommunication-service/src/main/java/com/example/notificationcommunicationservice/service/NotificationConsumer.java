@@ -2,7 +2,9 @@ package com.example.notificationcommunicationservice.service;
 
 import com.example.events.*;
 import com.example.notificationcommunicationservice.entity.ParentDetails;
+import com.example.notificationcommunicationservice.entity.StudentDetails;
 import com.example.notificationcommunicationservice.repository.ParentRepository;
+import com.example.notificationcommunicationservice.repository.StudentDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ public class NotificationConsumer {
     private final EmailService emailService;
     @Autowired
     private ParentRepository parentRepository;
+    @Autowired
+    private StudentDetailsRepository studentDetailsRepository;
     public NotificationConsumer(EmailService emailService) {
         this.emailService = emailService;
     }
@@ -25,7 +29,12 @@ public class NotificationConsumer {
     }
     @KafkaListener(topics="sendStudentCreated",groupId="notification-studentcreated-group")
     public void consumeStudentCreated(StudentCreatedEvent request) throws Exception {
-        emailService.sendStudentCreatedMail(request.getEmail(),request.getUsername(),request.getPassword());
+       StudentDetails s=new StudentDetails();
+       s.setEmail(request.getEmail());
+       s.setUsername(request.getUsername());
+       s.setId(request.getStudentId());
+       studentDetailsRepository.save(s);
+       emailService.sendStudentCreatedMail(request.getStudentId(),request.getEmail(),request.getUsername(),request.getPassword());
     }
     @KafkaListener(topics="sendPayslip",groupId="notification-payslip-group")
     public void consumeSendPayslip(PayslipGeneratedEvent request) throws Exception {
@@ -66,6 +75,16 @@ public class NotificationConsumer {
     public void consumeAcademics(AcademicsEvent request) throws Exception {
         ParentDetails p=parentRepository.findByStudentId(request.getStudentId());
         emailService.sendAcademics(p,request);
+    }
+    @KafkaListener(topics="bookReturnAlert",groupId="notification-bookReturn-group")
+    public void consumeBookReturnAlert(BookReturnAlert request) throws Exception {
+       StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found"));
+       emailService.sendBookReturnAlert(s.getEmail(),request);
+    }
+    @KafkaListener(topics="bookIsGivenToYou",groupId="notification-bookCollect-group")
+    public void consumeBookCollectAlert(BookCollectEvent request) throws Exception {
+        StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found"));
+        emailService.sendBookCollectAlert(s.getEmail(),request);
     }
 
 }

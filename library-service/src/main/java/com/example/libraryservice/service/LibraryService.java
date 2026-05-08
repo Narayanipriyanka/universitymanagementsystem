@@ -1,16 +1,18 @@
 package com.example.libraryservice.service;
 
+import com.example.events.BookCollectEvent;
 import com.example.libraryservice.dto.BookDTO;
-import com.example.libraryservice.entity.Book;
-import com.example.libraryservice.entity.BookRecords;
-import com.example.libraryservice.entity.BookStatus;
+import com.example.libraryservice.entity.*;
 import com.example.libraryservice.repository.BookRecordRepoistory;
 import com.example.libraryservice.repository.BookRepository;
+import com.example.libraryservice.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -19,6 +21,14 @@ public class LibraryService {
     private BookRepository repository;
     @Autowired
     private BookRecordRepoistory bookRecordRepoistory;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
+
+    public LibraryService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
     public List<Book> getAllBooksInDepartment(String deptCode){
         return repository.findAllByDeptCode(deptCode);
     }
@@ -47,6 +57,7 @@ public class LibraryService {
                 BookRecords records=new BookRecords();
                 records.setStudentId(studentId);
                 records.setBookId(b.getId());
+                records.setReturned(false);
                 records.setIssueDate(LocalDate.now());
                 records.setReturnDate(LocalDate.now().plusWeeks(1));
                 records.setFine(b.getMrp()*10/100);
@@ -61,7 +72,20 @@ public class LibraryService {
                 return "book borrowed successfully your book id is"+b.getId() +"preserve this id for return";
             }
             else{
-                return "this book is not avilable currently";
+                List<Reservation> reserves=reservationRepository.findAllByBookName(b.getBookName());
+                int lastPosition=0;
+                for(Reservation reser:reserves){
+                    if(reser.getPosition()>lastPosition){
+                    lastPosition= reser.getPosition();}
+                }
+                Reservation r=new Reservation();
+                r.setStudentId(studentId);
+                r.setBookName(bookName);
+                r.setPosition(lastPosition+1);
+                r.setStatus(ReservationStatus.WAITING);
+                r.setReserveDate(LocalDate.now());
+                reservationRepository.save(r);
+                return "this book is not available currently but the book is reserved to you once it is available based on your position in waitingList, you're position is"+r.getPosition();
             }
         }
          return " ";
@@ -69,26 +93,45 @@ public class LibraryService {
     public String returnBook(UUID studentId,String bookName){
         Book b=repository.findByBookName(bookName);
         BookRecords record=bookRecordRepoistory.findByStudentIdAndBookId(studentId,b.getId());
-        if(b.getCourseCode().equalsIgnoreCase(coursecode)&&b.getDeptCode().equalsIgnoreCase(deptCode)){
-            if(b.getCopies()>0&&b.getStatus().equals(BookStatus.AVAILABLE)){
-                b.setCopies(b.getCopies()-1);
-                List<UUID> students=b.getStudentIds();
-                students.add(studentId);
-                b.setStudentIds(students);
-                if(b.getCopies()-1==0){
-                    b.setStatus(BookStatus.BORROWED);
-                }
-                else {
-                    b.setStatus(BookStatus.AVAILABLE);
-                }
+        if(Objects.equals(b.getId(), record.getBookId()) &&b.getStudentIds().contains(studentId)){
+            if(LocalDate.now().isBefore(record.getReturnDate())){
+                List<UUID> ids=b.getStudentIds();
+                ids.remove(studentId);
+                b.setStudentIds(ids);
+                b.setCopies(b.getCopies()+1);
+                b.setStatus(BookStatus.AVAILABLE);
                 repository.save(b);
-                return "book borrowed successfully";
+                record.setReturned(true);
+                record.setReturnDate(LocalDate.now());
+                List<Reservation> reserves=reservationRepository.findAllByBookName(b.getBookName());
+                if(!reserves.isEmpty()){
+                int firstPosition=Integer.MAX_VALUE;
+                for(Reservation reser:reserves){
+                    if(reser.getPosition()<firstPosition&&reser.getPosition()!=0){
+                        firstPosition= reser.getPosition();}
+                }
+                Reservation reservation=reservationRepository.findByPosition(firstPosition);
+                reservation.setPosition(0);
+                reservation.setStatus(ReservationStatus.COLLECTED);
+                BookCollectEvent dto=new BookCollectEvent(reservation.getStudentId(),reservation.getBookId(),reservation.getBookName());
+                kafkaTemplate.send("bookIsGivenToYou",dto);}
+                return "book return successfully";
             }
             else{
-                return "this book is not avilable currently";
+                List<UUID> ids=b.getStudentIds();
+                ids.remove(studentId);
+                b.setStudentIds(ids);
+                b.setCopies(b.getCopies()+1);
+                b.setStatus(BookStatus.AVAILABLE);
+                repository.save(b);
+                record.setReturned(true);
+                record.setReturnDate(LocalDate.now());
+                return "pay "+record.getFine()+" for late return ";
             }
         }
         return " ";
     }
+
+
 
 }

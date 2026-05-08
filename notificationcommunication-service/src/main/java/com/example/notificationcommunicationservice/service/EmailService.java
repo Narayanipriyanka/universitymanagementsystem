@@ -1,9 +1,6 @@
 package com.example.notificationcommunicationservice.service;
 
-import com.example.events.AcademicsEvent;
-import com.example.events.LeaveEvent;
-import com.example.events.LowAttendanceAlert;
-import com.example.events.PayslipGeneratedEvent;
+import com.example.events.*;
 import com.example.facultyservice.entity.Payslip;
 import com.example.notificationcommunicationservice.entity.ParentDetails;
 import jakarta.mail.internet.MimeMessage;
@@ -15,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.UUID;
 
 @Service
 public class EmailService {
@@ -43,12 +41,12 @@ public class EmailService {
         mailMessage.setText("your scholarship application is verified by the university admin and the curent status is "+status+"   for furhter queires contact unniversity management team or reapply");
         mailSender.send(mailMessage);}
 
-    public void sendStudentCreatedMail(String email, String username, String password) {
+    public void sendStudentCreatedMail(UUID studentID, String email, String username, String password) {
         SimpleMailMessage mailMessage=new SimpleMailMessage();
         mailMessage.setTo(email);
         mailMessage.setFrom(fromEmail);
         mailMessage.setSubject("Hi student, you are registered into  university by admin ");
-        mailMessage.setText("welcome to our university,your student profile is being successfully registered into university database by admin kindly presevr the following credentials for further logins to university system\nyour username:"+username+"\n your password :"+password+"\n thanks & regards \n university team");
+        mailMessage.setText("welcome to our university,your student profile is being successfully registered into university database by admin kindly presevr the following credentials for further logins to university system\nYour student id:"+studentID+" \nyour username:"+username+"\n your password :"+password+"\n thanks & regards \n university team");
         mailSender.send(mailMessage);
     }
     public void sendPaySlipMail(PayslipGeneratedEvent payslip){
@@ -115,6 +113,24 @@ public class EmailService {
         mailMessage.setFrom(fromEmail);
         mailMessage.setSubject("Hi Parent,your child university Academics Record is here");
         mailMessage.setText("This is to inform you that ,your child has secured the following marks "+request.getMarks()+" with "+request.getGrade()+" grade in subjects"+request.getSubject()+" in the "+request.getSemester()+" semester \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
+
+    public void sendBookReturnAlert(String email,BookReturnAlert request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi Student,your book return date is"+request.getDaysLeft()+"days left");
+        mailMessage.setText("This is to inform you that ,your "+request.getBookName()+" book return date is"+request.getReturnDate()+"which is very close only " +request.getDaysLeft()+" days left so kindly return the book before "+request.getReturnDate()+" to avoid Rs."+request.getFine()+ "fine \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
+
+    public void sendBookCollectAlert(String email, BookCollectEvent request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi Student,the book you are waiting is for is available for you");
+        mailMessage.setText("This is to inform you that ,your "+request.getBookName()+" book reservation request is accepted now the book is available for you \n go to university page and borrow the book in the university page immediately otherwise the book maybe borrowed by some others \n thank you \n university team");
         mailSender.send(mailMessage);
     }
 }

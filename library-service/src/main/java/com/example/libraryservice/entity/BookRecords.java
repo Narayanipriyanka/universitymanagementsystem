@@ -18,9 +18,17 @@ public class BookRecords {
     private LocalDate issueDate;
     private LocalDate returnDate;
     private Double fine;
-
+    private Boolean isReturned;
     public Long getBookId() {
         return bookId;
+    }
+
+    public Boolean getReturned() {
+        return isReturned;
+    }
+
+    public void setReturned(Boolean returned) {
+        isReturned = returned;
     }
 
     public Double getFine() {
