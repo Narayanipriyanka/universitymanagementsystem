@@ -3,6 +3,7 @@ package com.example.notificationcommunicationservice.service;
 import com.example.events.*;
 import com.example.facultyservice.entity.Payslip;
 import com.example.notificationcommunicationservice.entity.ParentDetails;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -132,5 +134,19 @@ public class EmailService {
         mailMessage.setSubject("Hi Student,the book you are waiting is for is available for you");
         mailMessage.setText("This is to inform you that ,your "+request.getBookName()+" book reservation request is accepted now the book is available for you \n go to university page and borrow the book in the university page immediately otherwise the book maybe borrowed by some others \n thank you \n university team");
         mailSender.send(mailMessage);
+    }
+
+    public void sendResources(String email, DigitalResourcesEvent request) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(email);
+        helper.setFrom(fromEmail);
+        helper.setSubject("Hi,DigitalResources for the "+request.getCourseCode()+" is here");
+        helper.setText("Here are the list of pdfs and videos for your "+request.getCourseCode()+" course. Download attached files.");
+        List<String> filePaths=request.getFilePath();
+        for(String filePath:filePaths){
+        File file = new File(filePath);
+        helper.addAttachment(file.getName(), file);}
+        mailSender.send(message);
     }
 }

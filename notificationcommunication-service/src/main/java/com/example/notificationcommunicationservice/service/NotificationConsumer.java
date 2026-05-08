@@ -86,6 +86,12 @@ public class NotificationConsumer {
         StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found"));
         emailService.sendBookCollectAlert(s.getEmail(),request);
     }
+    @KafkaListener(topics="sendResources",groupId="notification-sendResources-group")
+    public void consumeResources(DigitalResourcesEvent request) throws Exception {
+        StudentDetails s=studentDetailsRepository.findByUsername(request.getStudentUsername());
+        emailService.sendResources(s.getEmail(),request);
+    }
+
 
 }
 

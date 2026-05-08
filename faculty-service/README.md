@@ -20,6 +20,10 @@ student-service running on :8084
 key cloak running on 8080
 kafka running on 9092
 
+## database
+create a database -create database facultydatabase; in mysql workbench
+use facultydatabase;
+
 ## setup
 to access any of the api present in the faculty service
 one must click on authorize symbol in the swagger and login

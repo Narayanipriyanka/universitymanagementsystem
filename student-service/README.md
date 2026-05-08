@@ -24,6 +24,9 @@ kafka running on 9092
 ## setup
 to access any of the api presnt in the student service
 one must click on authorize symbol in the swagger and login 
+## database
+create a database -create database studentdatabase;
+                   use studentdatabase;
 
 After login ,based on his role he can access only certain end points 
 STUDENT-apply for id card,scholarship,get scholarship status,get transcripts etc..

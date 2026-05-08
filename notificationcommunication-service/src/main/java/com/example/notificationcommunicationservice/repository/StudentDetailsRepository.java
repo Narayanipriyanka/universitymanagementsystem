@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 @Repository
 public interface StudentDetailsRepository extends JpaRepository<StudentDetails, UUID> {
+    StudentDetails findByUsername(String studentUsername);
 }

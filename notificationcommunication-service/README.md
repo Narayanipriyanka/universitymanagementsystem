@@ -17,6 +17,9 @@ kafka running on 9092
 this service has some automatic email sending mechanism where it consumes events like ID card generated event,leave event ,etc.. based on the event 
 consumed it is redirected to emailsender and sends the appropriate mail related to the event consumed automatically to the respective user
 
+## database
+create a database -create database notificationdatabase;
+use notificationdatabase;
 
 ## website
 http://localhost:8081/webjars/swagger-ui/index.html?urls.primaryName=auth-service
