@@ -3,6 +3,9 @@ package com.example.enrollmentservice.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import java.util.List;
+import java.util.UUID;
+
 @Entity
 public class Section {
     @Id
@@ -12,12 +15,40 @@ public class Section {
     private Integer capacity;
     private Integer availableSeats;
     private Integer allocatedSeats;
-
+    private List<UUID> studentIds;
     public Section(Long sectionId, Integer capacity, String room, String courseCode) {
         this.sectionId=sectionId;
         this.room=room;
         this.courseCode=courseCode;
         this.capacity=capacity;
+    }
+
+    public Integer getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public List<UUID> getStudentIds() {
+        return studentIds;
+    }
+
+    public void setStudentIds(List<UUID> studentIds) {
+        this.studentIds = studentIds;
+    }
+
+    public Integer getAllocatedSeats() {
+        return allocatedSeats;
+    }
+
+    public void setAllocatedSeats(Integer allocatedSeats) {
+        this.allocatedSeats = allocatedSeats;
+    }
+
+    public void setAvailableSeats(Integer availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public Section() {
+
     }
 
     public Long getSectionId() {

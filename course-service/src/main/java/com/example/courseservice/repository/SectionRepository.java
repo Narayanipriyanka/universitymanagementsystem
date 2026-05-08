@@ -10,5 +10,5 @@ import java.util.List;
 public interface SectionRepository extends JpaRepository<Sections,Long> {
     Sections finAllByCourseCode(String code);
 
-    List<Sections> findAllByCourseCode(String code);
+    List<Sections> findAllByCourseCode(java.lang.String code);
 }

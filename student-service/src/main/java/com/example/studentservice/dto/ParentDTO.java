@@ -7,7 +7,7 @@ public class ParentDTO {
     private String relation;
     private String phone;
     private UUID studentId;
-
+    private String email;
     public String getParentName() {
         return parentName;
     }
@@ -18,6 +18,14 @@ public class ParentDTO {
 
     public UUID getStudentId() {
         return studentId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setStudentId(UUID studentId) {

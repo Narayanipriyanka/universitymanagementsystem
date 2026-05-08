@@ -1,5 +1,6 @@
 package com.example.studentservice.service;
 
+import com.example.events.AcademicsEvent;
 import com.example.studentservice.dto.AcademicRecordDTO;
 import com.example.studentservice.dto.TranscriptDTO;
 import com.example.studentservice.entity.AcademicsRecord;
@@ -7,6 +8,7 @@ import com.example.studentservice.entity.Student;
 import com.example.studentservice.repository.AcademicsRepository;
 import com.example.studentservice.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,12 @@ public class AcademicService {
     private AcademicsRepository academicsRepository;
     @Autowired
     private StudentRepository studentRepository;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
+
+    public AcademicService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
     public AcademicsRecord addRecord(AcademicRecordDTO academicRecordDTO){
         AcademicsRecord record=new AcademicsRecord();
         record.setStudentId(academicRecordDTO.getStudentId());
@@ -25,6 +33,8 @@ public class AcademicService {
         record.setSemester(academicRecordDTO.getSemester());
         record.setMarks(academicRecordDTO.getMarks());
         record.setGrade(calculateGrade(academicRecordDTO.getMarks()));
+        AcademicsEvent dto=new AcademicsEvent(record.getStudentId(),record.getSubject(),record.getMarks(),record.getSemester(),record.getGrade());
+        kafkaTemplate.send("sendAcademics",dto);
         return academicsRepository.save(record);
     }
     public List<AcademicsRecord> getAllAcademicRecordsOfStudent(UUID studentId){

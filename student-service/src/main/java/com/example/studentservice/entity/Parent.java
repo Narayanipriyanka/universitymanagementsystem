@@ -14,13 +14,21 @@ public class Parent {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
-
+     private String email;
     public String getParentName() {
         return parentName;
     }
 
     public Student getStudent() {
         return student;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setStudent(Student student) {

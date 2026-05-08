@@ -1,10 +1,7 @@
 package com.example.studentservice.service;
 
 
-import com.example.events.MaterialEvent;
-import com.example.events.RegisterRequest;
-import com.example.events.StudentCreatedEvent;
-import com.example.events.SyllabusEvent;
+import com.example.events.*;
 import com.example.studentservice.dto.ParentDTO;
 import com.example.studentservice.dto.ProfileDTO;
 import com.example.studentservice.entity.*;
@@ -68,7 +65,7 @@ public List<Student> addStudentsCsv(MultipartFile file) throws IOException {
         s.setStatus(StudentIDcardStatus.PENDING);
 
         students.add(s);
-        StudentCreatedEvent dto=new StudentCreatedEvent(s.getEmail(),s.getUsername(),s.getPassword(), s.getStudentStatus().toString());
+        StudentCreatedEvent dto=new StudentCreatedEvent(s.getId(),s.getEmail(),s.getUsername(),s.getPassword(), s.getStudentStatus().toString());
         kafkaTemplate.send("sendStudentCreated",dto);
     }
     return repository.saveAll(students);
@@ -77,7 +74,7 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
     Student s=repository.findById(studentId).orElseThrow(()->new RuntimeException("no student found"));
     s.setStudentStatus(status);
     repository.save(s);
-    StudentCreatedEvent dto=new StudentCreatedEvent(s.getEmail(),s.getUsername(),s.getPassword(),s.getStudentStatus().toString());
+    StudentCreatedEvent dto=new StudentCreatedEvent(s.getId(),s.getEmail(),s.getUsername(),s.getPassword(),s.getStudentStatus().toString());
     kafkaTemplate.send("sendStudentCreated",dto);
     return "status updated successfully";
 }
@@ -95,7 +92,7 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
         student.setDateOfBirth(req.getDateOfBirth());
         student.setCurrentSemester(1);
         repository.save(student);
-        StudentCreatedEvent dto=new StudentCreatedEvent(student.getEmail(),student.getUsername(),student.getPassword(), student.getStudentStatus().toString());
+        StudentCreatedEvent dto=new StudentCreatedEvent(student.getId(),student.getEmail(),student.getUsername(),student.getPassword(), student.getStudentStatus().toString());
         kafkaTemplate.send("sendStudentCreated",dto);
 
     }
@@ -137,7 +134,10 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
         parent.setRelation(parentDTO.getRelation());
         parent.setPhone(parentDTO.getPhone());
         parent.setStudent(student);
+        parent.setEmail(parentDTO.getEmail());
         parentRepository.save(parent);
+        ParentEvent dto=new ParentEvent(parent.getEmail(),parent.getStudent().getId(),parent.getParentName(),parent.getPhone(),parent.getRelation());
+        kafkaTemplate.send("sendParent",dto);
         return "parent added successfully to student :"+student.getId();
     }
 
@@ -169,7 +169,7 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
         s.setStudentStatus(StudentStatus.ACTIVE);
         s.setStatus(StudentIDcardStatus.PENDING);
         students.add(s);
-        StudentCreatedEvent dto=new StudentCreatedEvent(s.getEmail(),s.getUsername(),s.getPassword(), s.getStudentStatus().toString());
+        StudentCreatedEvent dto=new StudentCreatedEvent(s.getId(),s.getEmail(),s.getUsername(),s.getPassword(), s.getStudentStatus().toString());
         kafkaTemplate.send("sendStudentCreated",dto);
 
     }

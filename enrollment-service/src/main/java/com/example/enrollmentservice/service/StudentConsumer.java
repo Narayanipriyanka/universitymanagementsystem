@@ -16,6 +16,7 @@ public class StudentConsumer {
     @KafkaListener(topics="sendStudentCreated",groupId="enroll-student-group")
     public void consume(StudentCreatedEvent event){
         Student s=new Student();
+        s.setId(event.getStudentId());
         s.setEmail(event.getEmail());
         s.setPassword(event.getPassword());
         s.setStudentStatus(event.getStudentStatus());

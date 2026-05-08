@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public class Enrollment {
     private List<UUID> studentids;
     private String courseCode;
     private Integer sem;
+    private LocalDate deadline;
 
     public Long getId() {
         return id;
@@ -35,6 +37,22 @@ public class Enrollment {
 
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
+    }
+
+    public List<UUID> getStudentids() {
+        return studentids;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public void setStudentids(List<UUID> studentids) {
+        this.studentids = studentids;
     }
 
     public List<UUID> getStudentid() {

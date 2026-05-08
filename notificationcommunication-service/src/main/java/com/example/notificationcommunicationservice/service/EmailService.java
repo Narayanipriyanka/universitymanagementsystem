@@ -1,9 +1,11 @@
 package com.example.notificationcommunicationservice.service;
 
+import com.example.events.AcademicsEvent;
 import com.example.events.LeaveEvent;
 import com.example.events.LowAttendanceAlert;
 import com.example.events.PayslipGeneratedEvent;
 import com.example.facultyservice.entity.Payslip;
+import com.example.notificationcommunicationservice.entity.ParentDetails;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,5 +107,14 @@ public class EmailService {
         File file = new File(filePath);
         helper.addAttachment(file.getName(), file);
         mailSender.send(message);
+    }
+
+    public void sendAcademics(ParentDetails p, AcademicsEvent request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(p.getEmail());
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi Parent,your child university Academics Record is here");
+        mailMessage.setText("This is to inform you that ,your child has secured the following marks "+request.getMarks()+" with "+request.getGrade()+" grade in subjects"+request.getSubject()+" in the "+request.getSemester()+" semester \n thank you \n university team");
+        mailSender.send(mailMessage);
     }
 }

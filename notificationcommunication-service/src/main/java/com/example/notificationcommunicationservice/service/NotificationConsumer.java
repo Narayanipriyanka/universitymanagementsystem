@@ -1,12 +1,17 @@
 package com.example.notificationcommunicationservice.service;
 
 import com.example.events.*;
+import com.example.notificationcommunicationservice.entity.ParentDetails;
+import com.example.notificationcommunicationservice.repository.ParentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NotificationConsumer {
     private final EmailService emailService;
+    @Autowired
+    private ParentRepository parentRepository;
     public NotificationConsumer(EmailService emailService) {
         this.emailService = emailService;
     }
@@ -39,14 +44,29 @@ public class NotificationConsumer {
         emailService.sendLeaveStatuseMail(request);
     }
     @KafkaListener(topics="sendSyllabusEmail",groupId = "notfication-syllabus-group")
-    public void consumeSyllabus(SyllabusEvent request){
+    public void consumeSyllabus(SyllabusEvent request) throws Exception {
         emailService.sendSyllabusEmail(request.getEmail(), request.getFilePath(),request.getCourseCode());
     }
     @KafkaListener(topics="sendMaterialEmail",groupId = "notfication-syllabus-group")
-    public void consumeMaterial(MaterialEvent request){
+    public void consumeMaterial(MaterialEvent request) throws Exception {
         emailService.sendMaterialsEmail(request.getEmail(), request.getFilePath(),request.getCourseCode());
     }
+    @KafkaListener(topics="sendParent",groupId = "notfication-parent-group")
+    public void consumeParent(ParentEvent request) throws Exception {
+        ParentDetails p=new ParentDetails();
+        p.setStudentId(request.getStudentId());
+        p.setEmail(request.getEmail());
+        p.setName(request.getName());
+        p.setRelation(request.getRelation());
+        p.setPhone(request.getPhone());
+        parentRepository.save(p);
+    }
 
+    @KafkaListener(topics="sendAcademics",groupId="notification-academics-group")
+    public void consumeAcademics(AcademicsEvent request) throws Exception {
+        ParentDetails p=parentRepository.findByStudentId(request.getStudentId());
+        emailService.sendAcademics(p,request);
+    }
 
 }
 

@@ -19,6 +19,8 @@ public class SectionConsumer {
         s.setCapacity(event.getCapacity());
         s.setRoom(event.getRoom());
         s.setCourseCode(event.getCourseCode());
+        s.setAvailableSeats(event.getCapacity());
+        s.setAllocatedSeats(0);
         sectionRepository.save(s);
     }
 }
