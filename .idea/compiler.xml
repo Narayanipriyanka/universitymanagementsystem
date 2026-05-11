@@ -6,18 +6,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Attendance-Service" />
+        <module name="department-service" />
+        <module name="faculty-service" />
+        <module name="enrollment-service" />
         <module name="course-service" />
         <module name="auth-service" />
-        <module name="Attendance-Service" />
         <module name="apigateway-service" />
-        <module name="department-service" />
         <module name="notificationcommunication-service" />
+        <module name="feemanagement-service" />
         <module name="Hostel-service" />
         <module name="student-service" />
-        <module name="faculty-service" />
         <module name="library-service" />
+        <module name="grade-service" />
         <module name="events" />
-        <module name="enrollment-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -37,6 +39,8 @@
       <module name="enrollment-service" options="-parameters" />
       <module name="events" options="-parameters" />
       <module name="faculty-service" options="-parameters" />
+      <module name="feemanagement-service" options="-parameters" />
+      <module name="grade-service" options="-parameters" />
       <module name="kafkaevents" options="-parameters" />
       <module name="library-service" options="-parameters" />
       <module name="notificationcommunication-service" options="-parameters" />

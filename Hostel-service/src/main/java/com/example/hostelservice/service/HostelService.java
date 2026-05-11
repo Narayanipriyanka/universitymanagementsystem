@@ -1,17 +1,15 @@
 package com.example.hostelservice.service;
 
 import com.example.hostelservice.dto.HostelDTO;
+import com.example.hostelservice.dto.MessDTO;
 import com.example.hostelservice.dto.RoomDTO;
-import com.example.hostelservice.entity.Hostel;
-import com.example.hostelservice.entity.HostelType;
-import com.example.hostelservice.entity.Room;
-import com.example.hostelservice.entity.RoomAllocation;
-import com.example.hostelservice.repository.HostelRepository;
-import com.example.hostelservice.repository.RoomAllocationRepository;
-import com.example.hostelservice.repository.RoomRepository;
+import com.example.hostelservice.dto.VisitorDTO;
+import com.example.hostelservice.entity.*;
+import com.example.hostelservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +21,13 @@ public class HostelService {
     @Autowired
     private RoomRepository roomRepository;
     @Autowired
+    private MessRepository messRepository;
+    @Autowired
+    private MealRepsoitory mealRepsoitory;
+    @Autowired
     private RoomAllocationRepository allocationRepository;
-
+@Autowired
+private VisitorLogsRepository visitorLogsRepository;
     public String addHostel(HostelDTO dto){
         Hostel h=new Hostel();
         h.setFee(dto.getFee());
@@ -94,6 +97,101 @@ public class HostelService {
             }
         }
         return "student is added into room no"+a.getRoomNo();
+    }
+
+    public String addVisitorLog(VisitorDTO dto){
+        VisitorLogs logs=new VisitorLogs();
+        logs.setEntryTime(dto.getEntryTime());
+        logs.setVisitDate(LocalDate.now());
+        logs.setExitTime(dto.getExitTime());
+        logs.setStudentID(dto.getStudentID());
+        logs.setVisitorName(dto.getVisitorName());
+        logs.setReason(dto.getReason());
+        logs.setRelation(dto.getRelation());
+        visitorLogsRepository.save(logs);
+        return "visitor log added successfully";
+    }
+    public String addMess(MessDTO dto){
+        Mess m=new Mess();
+        m.setMonthlyFee(dto.getMonthlyFee());
+        m.setOnlyForHostelers(dto.getOnlyForHostelers());
+        m.setType(dto.getType());
+        messRepository.save(m);
+        return "mess added successfully with id"+m.getId();
+    }
+    public List<MessDTO> getAllMessDetails(){
+        List<Mess> m=messRepository.findAll();
+        List<MessDTO> dto=new ArrayList<>();
+        for(Mess mess:m){
+            MessDTO messDTO=new MessDTO();
+            messDTO.setType(mess.getType());
+            messDTO.setMonthlyFee(mess.getMonthlyFee());
+            messDTO.setOnlyForHostelers(mess.getOnlyForHostelers());
+            dto.add(messDTO);
+        }
+        return dto;
+    }
+    public String selectAMess(UUID studentId,MessDTO dto){
+        List<Mess> m=messRepository.findByType(dto.getType());
+        for(Mess mess:m){
+            if(mess.getOnlyForHostelers()==dto.getOnlyForHostelers()&&mess.getMonthlyFee()==dto.getMonthlyFee()){
+                List<UUID> studentIds=mess.getStudentIds();
+                studentIds.add(studentId);
+                mess.setStudentIds(studentIds);
+                messRepository.save(mess);
+                return "mess selected successfully your mess id is"+mess.getId();
+            }
+        }
+        return " ";
+    }
+    public String addMealPLan(Long messId,MealType type){
+        Mess mess=messRepository.findById(messId).orElseThrow(()->new RuntimeException("no mess found with this id"));
+        Meal m=new Meal();
+        m.setMealType(type);
+        m.setMessId(messId);
+        if(type==MealType.BASIC)
+            m.setMonthlyFee(mess.getMonthlyFee());
+        else if (type==MealType.SPECIAL) {
+            m.setMonthlyFee(mess.getMonthlyFee()+2000);
+        }
+        mealRepsoitory.save(m);
+        return "meal plan added successfully";
+    }
+    public String selectMealPlan(UUID studentId,Long messId,MealType type){
+       List<Meal> meal=mealRepsoitory.findAllByMessId(messId);
+       Mess mess=messRepository.findById(messId).orElseThrow(()->new RuntimeException("no mess found with this id"));
+        for(Meal m:meal){
+            if(m.getMealType()==type){
+                List<UUID> studentIds=m.getStudentIds();
+                studentIds.add(studentId);
+                m.setStudentIds(studentIds);
+                if(type==MealType.BASIC)
+                    m.setMonthlyFee(mess.getMonthlyFee());
+                else if (type==MealType.SPECIAL) {
+                    m.setMonthlyFee(mess.getMonthlyFee()+2000);
+                }
+                mealRepsoitory.save(m);
+                return "meal selected successfully your meal id is"+m.getId()+",your monthly mess fee is:"+m.getMonthlyFee();
+            }
+        }
+        return " ";
+    }
+    public String noOFVegOrNonvegStudents(MessType messType){
+        List<Mess> m=messRepository.findAllByType(messType);
+        int total=0;
+        for(Mess mess:m){
+            total+=mess.getStudentIds().size();
+        }
+        return "total "+total+" students are eating"+messType+" food";
+    }
+    public String dropFromMealPlan(UUID studentID,Long mealID){
+        Meal m=mealRepsoitory.findById(mealID).orElseThrow(()->new RuntimeException("no meal plan found with this id"));
+        List<UUID> studentIds=m.getStudentIds();
+        studentIds.remove(studentID);
+        m.setStudentIds(studentIds);
+        mealRepsoitory.save(m);
+        return "dropped from "+m.getMealType()+"plan successfully";
+
     }
 
 }
