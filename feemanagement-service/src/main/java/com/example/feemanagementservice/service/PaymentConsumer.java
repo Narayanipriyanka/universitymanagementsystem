@@ -3,6 +3,7 @@ package com.example.feemanagementservice.service;
 import com.example.events.PayFeesEvent;
 import com.example.feemanagementservice.entity.Payment;
 import com.example.feemanagementservice.entity.PaymentFor;
+import com.example.feemanagementservice.entity.PaymentStatus;
 import com.example.feemanagementservice.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -28,6 +29,7 @@ public class PaymentConsumer {
         else{
             p.setCategory(PaymentFor.TUTION_FEE);}
         p.setStudentId(dto.getStudentId());
+        p.setStatus(PaymentStatus.PAYMENT_NOT_DONE);
        paymentRepository.save(p);
 
     }

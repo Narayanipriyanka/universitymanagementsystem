@@ -16,12 +16,21 @@ public class Payment {
     private Double amount;
     private PaymentFor category;
     private PaymentMethod paymentMethod;
+    private PaymentStatus status;
     public Long getId() {
         return id;
     }
 
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
+    }
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {

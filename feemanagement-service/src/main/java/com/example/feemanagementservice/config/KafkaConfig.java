@@ -21,9 +21,17 @@ public class KafkaConfig {
     public NewTopic paymentLinkTopic(){
         return new NewTopic("sendPaymentLink",1,(short) 1);
     }
-    @Bean
+       @Bean
     public NewTopic invoiceTopic(){
         return new NewTopic("sendInvoice",1,(short) 1);
+    }
+    @Bean
+    public NewTopic overDueAlertTopic(){
+        return new NewTopic("sendOverDueAlert",1,(short) 1);
+    }
+    @Bean
+    public NewTopic examFeepaidTopic(){
+        return new NewTopic("examFeePaid",1,(short) 1);
     }
 
     @Bean

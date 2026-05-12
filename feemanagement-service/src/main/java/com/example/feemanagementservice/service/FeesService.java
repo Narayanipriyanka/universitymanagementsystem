@@ -1,11 +1,13 @@
 package com.example.feemanagementservice.service;
 
+import com.example.events.ExamFeePaidEvent;
 import com.example.events.FeeInvoiceEvent;
 import com.example.events.PayFeesEvent;
 import com.example.events.PaymentLinkEvent;
 import com.example.feemanagementservice.dto.FeeStructureDTO;
 import com.example.feemanagementservice.dto.PaymentDTO;
 import com.example.feemanagementservice.entity.*;
+import com.example.feemanagementservice.repository.EnrolledCoursesRepository;
 import com.example.feemanagementservice.repository.FeeRecordRepository;
 import com.example.feemanagementservice.repository.FeeStructureRepository;
 import com.example.feemanagementservice.repository.PaymentRepository;
@@ -21,12 +23,15 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class FeesService {
     private final RazorpayClient razorpayClient;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private EnrolledCoursesRepository enrolledCoursesRepository;
     @Autowired
     private FeeStructureRepository feeStructureRepository;
     @Autowired
@@ -58,13 +63,24 @@ public class FeesService {
         }
         return struct.toString();
     }
-
+public String feePaymentTracking(UUID studentID,PaymentFor category){
+        List<Payment> p=paymentRepository.findAllByStudentId(studentID);
+        for(Payment payment:p){
+            if(payment.getCategory()==category){
+                return payment.getStatus().toString();
+            }
+        }
+        return " ";
+}
     public String payFees(PaymentDTO payDTO) throws RazorpayException {
         FeeRecord f=feeRecordRepository.findByStudentId(payDTO.getStudentId()).orElseThrow(()->new RuntimeException("no student fee record found"));
         f.setTotalbalance(f.getTotalbalance()-payDTO.getAmount());
         f.setPaid(f.getPaid()+payDTO.getAmount());
+        EnrolledCourses e=enrolledCoursesRepository.findByStudentIdAndSemesterAndProgram(payDTO.getStudentId(),payDTO.getSemester(),payDTO.getProgram());
         Double categoryBalance=0.0;
         if(payDTO.getCategory()== PaymentFor.EXAM_FEE){
+            ExamFeePaidEvent event=new ExamFeePaidEvent(payDTO.getStudentId(),payDTO.getProgram(),payDTO.getSemester(),e.getCourseCode());
+            kafkaTemplate.send("examFeePaid",event);
             f.setExamFeeBalance(f.getExamFeeBalance()-payDTO.getAmount());
             categoryBalance+=f.getExamFeeBalance()-payDTO.getAmount();
         }
@@ -89,12 +105,14 @@ public class FeesService {
 
         }
         feeRecordRepository.save(f);
+
         FeeInvoiceEvent event=new FeeInvoiceEvent(payDTO.getStudentId(),payDTO.getCategory().toString(),payDTO.getAmount(),categoryBalance,f.getTotalbalance(), LocalDate.now());
         kafkaTemplate.send("sendInvoice",event);
         List<Payment> pays=paymentRepository.findAllByStudentId(payDTO.getStudentId());
         for(Payment p:pays){
            if(p.getCategory()==payDTO.getCategory()&&p.getAmount()==payDTO.getAmount())
            {p.setPaymentMethod(payDTO.getPaymentMethod());
+               p.setStatus(PaymentStatus.PROCESSING);
                if(payDTO.getPaymentMethod()==PaymentMethod.ONLINE_BANKING||payDTO.getPaymentMethod()==PaymentMethod.UPI){
                    JSONObject paymentLink =new JSONObject();
                    paymentLink.put("amount",p.getAmount()*100);

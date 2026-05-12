@@ -179,4 +179,13 @@ public class EmailService {
         mailMessage.setText("This is to inform you that ,the university"+circular.getProgramCode()+" "+circular.getDeptCode()+" has a new circular released on "+circular.getReleaseDate()+" \n"+circular.getTitle()+" \n"+circular.getDescription()+"  \n thank you \n university team");
         mailSender.send(mailMessage);
     }
+
+    public void sendOverDueAlert(String email, OverDueAlert request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi,Fee Overdue Pay immediately!");
+        mailMessage.setText("This is to inform you that ,Your fee balance is overdue by Rs."+request.getTotalBalance() +"The detailed fee balance deatials are given below:\n Tution fee Balance:Rs"+request.getTutionFeeBalance()+"\n Hostel Fee Balance:Rs"+request.getHostelFeeBalance()+"\nExam Fee balance:Rs"+request.getExamFeeBalance()+"\n Mess Fee Balance :Rs"+request.getMessFeeBalance()+"Records Fee Balance:Rs"+request.getRecordFeeBalance()+" kindly pay the fee and clear the balance as soon as possible to avoid the prohibitons and breakages in course exams  \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
 }

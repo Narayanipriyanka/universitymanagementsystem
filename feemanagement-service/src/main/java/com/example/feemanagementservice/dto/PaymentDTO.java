@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public class PaymentDTO {
     private UUID studentId;
+    private Integer semester;
+    private String program;
     private Double amount;
     private PaymentFor category;
     private PaymentMethod paymentMethod;
@@ -17,6 +19,22 @@ public class PaymentDTO {
 
     public Double getAmount() {
         return amount;
+    }
+
+    public String getProgram() {
+        return program;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
+    }
+
+    public Integer getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Integer semester) {
+        this.semester = semester;
     }
 
     public PaymentFor getCategory() {
