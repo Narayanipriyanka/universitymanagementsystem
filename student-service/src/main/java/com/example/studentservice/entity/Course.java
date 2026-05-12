@@ -15,11 +15,11 @@ public class Course {
     private String syllabusPath;
     @ManyToMany(mappedBy = "courses")
     private List<Student> students;
-    public String getSemester() {
+    public Integer getSemester() {
         return semester;
     }
 
-    public void setSemester(String semester) {
+    public void setSemester(Integer semester) {
         this.semester = semester;
     }
 
@@ -72,7 +72,7 @@ public class Course {
         this.id = id;
     }
 
-    private String semester;
+    private Integer semester;
 
 
 

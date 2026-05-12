@@ -1,8 +1,10 @@
 package com.example.notificationcommunicationservice.service;
 
 import com.example.events.*;
+import com.example.notificationcommunicationservice.entity.FacultyDetails;
 import com.example.notificationcommunicationservice.entity.ParentDetails;
 import com.example.notificationcommunicationservice.entity.StudentDetails;
+import com.example.notificationcommunicationservice.repository.FacultyDetailsRepository;
 import com.example.notificationcommunicationservice.repository.ParentRepository;
 import com.example.notificationcommunicationservice.repository.StudentDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ public class NotificationConsumer {
     private final EmailService emailService;
     @Autowired
     private ParentRepository parentRepository;
+    @Autowired
+    private FacultyDetailsRepository facultyDetailsRepository;
     @Autowired
     private StudentDetailsRepository studentDetailsRepository;
     public NotificationConsumer(EmailService emailService) {
@@ -42,6 +46,11 @@ public class NotificationConsumer {
     }
     @KafkaListener(topics="sendFacultyCreated",groupId="notification-facultycreated-group")
     public void consumeFacultyCreated(FacultyCreatedEvent request) throws Exception {
+        FacultyDetails f=new FacultyDetails();
+        f.setId(request.getFacultyId());
+        f.setEmail(request.getEmail());
+        f.setUsername(request.getUsername());
+        facultyDetailsRepository.save(f);
         emailService.sendFacultyCreatedMail(request.getEmail(), request.getUsername(),request.getPassword());
     }
     @KafkaListener(topics = "lowAttendance",groupId = "notification-lowattendance-group")
@@ -91,6 +100,17 @@ public class NotificationConsumer {
         StudentDetails s=studentDetailsRepository.findByUsername(request.getStudentUsername());
         emailService.sendResources(s.getEmail(),request);
     }
+    @KafkaListener(topics="sendInvoice",groupId="notification-sendInvoice-group")
+    public void consumeFeeInvoice(FeeInvoiceEvent request) throws Exception {
+        StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found with this id"));
+        emailService.sendInvoice(s.getEmail(),request);
+    }
+    @KafkaListener(topics="sendPaymentLink",groupId="notification-sendPaymentLink-group")
+    public void consumepaymentLink(PaymentLinkEvent request) throws Exception {
+        StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found with this id"));
+        emailService.sendPaymentLink(s.getEmail(),request);
+    }
+
 
 
 }

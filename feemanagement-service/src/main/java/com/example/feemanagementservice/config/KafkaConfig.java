@@ -1,4 +1,4 @@
-package com.example.studentservice.config;
+package com.example.feemanagementservice.config;
 
 import com.example.events.RegisterRequest;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -8,7 +8,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
@@ -16,13 +15,15 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
-
-@EnableKafka
 @Configuration
 public class KafkaConfig {
     @Bean
     public NewTopic paymentLinkTopic(){
-        return new NewTopic("enrollCourse",1,(short) 1);
+        return new NewTopic("sendPaymentLink",1,(short) 1);
+    }
+    @Bean
+    public NewTopic invoiceTopic(){
+        return new NewTopic("sendInvoice",1,(short) 1);
     }
 
     @Bean

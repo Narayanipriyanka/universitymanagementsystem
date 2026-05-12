@@ -2,7 +2,9 @@ package com.example.notificationcommunicationservice.service;
 
 import com.example.events.*;
 import com.example.facultyservice.entity.Payslip;
+import com.example.notificationcommunicationservice.entity.Circulars;
 import com.example.notificationcommunicationservice.entity.ParentDetails;
+import com.example.notificationcommunicationservice.entity.StudentDetails;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ public class EmailService {
     private JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String fromEmail;
+
 
     public void sendIdCardEmail(String toEmail, String filePath) throws Exception {
 
@@ -148,5 +151,32 @@ public class EmailService {
         File file = new File(filePath);
         helper.addAttachment(file.getName(), file);}
         mailSender.send(message);
+    }
+
+    public void sendInvoice(String email, FeeInvoiceEvent request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi Student,Payment success Invoice Generated");
+        mailMessage.setText("This is to inform you that ,your Payment for"+request.getCategory()+" is success \nrecieved amount:"+request.getAmountPaid()+" remaining "+request.getCategory()+"  balance to be paid is "+request.getBalance()+" Total remaining balance to be apid for the current semester and program is"+request.getTotalBalance()+" \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
+
+    public void sendPaymentLink(String email, PaymentLinkEvent request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi Student,Here is the payment link");
+        mailMessage.setText("This is to inform you that ,your Payment link is"+request.getPaymentlink()+" \nPay amount: Rs."+request.getAmount()+"  \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
+
+    public void sendCircular(String email,Circulars circular) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi,Here is the new circular from university ");
+        mailMessage.setText("This is to inform you that ,the university"+circular.getProgramCode()+" "+circular.getDeptCode()+" has a new circular released on "+circular.getReleaseDate()+" \n"+circular.getTitle()+" \n"+circular.getDescription()+"  \n thank you \n university team");
+        mailSender.send(mailMessage);
     }
 }

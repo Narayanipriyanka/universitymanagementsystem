@@ -19,6 +19,7 @@
         <option value="$PROJECT_DIR$/Hostel-service/pom.xml" />
         <option value="$PROJECT_DIR$/grade-service/pom.xml" />
         <option value="$PROJECT_DIR$/feemanagement-service/pom.xml" />
+        <option value="$PROJECT_DIR$/exam-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

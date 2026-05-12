@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -139,6 +140,22 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
         ParentEvent dto=new ParentEvent(parent.getEmail(),parent.getStudent().getId(),parent.getParentName(),parent.getPhone(),parent.getRelation());
         kafkaTemplate.send("sendParent",dto);
         return "parent added successfully to student :"+student.getId();
+    }
+    public List<Course> getAllAvailableCourses(){
+    return courseRepository.findAll();
+    }
+    public String enrollInCourse(Long courseId,String courseCode){
+    Student s=repository.findByUsername(getUserName());
+    Course c=courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("no course found with this id"));
+    if(Objects.equals(c.getCourseCode(), courseCode)){
+        List<Student> students=c.getStudents();
+        students.add(s);
+        c.setStudents(students);
+        courseRepository.save(c);
+        EnrollEvent e=new EnrollEvent(s.getId(),c.getProgram(),c.getSemester(),c.getCourseCode());
+        kafkaTemplate.send("enrollCourse",e);
+    }
+    return "enrolled in "+courseCode+" successfully";
     }
 
     public List<Course> getEnrollCourses(UUID studentId) {

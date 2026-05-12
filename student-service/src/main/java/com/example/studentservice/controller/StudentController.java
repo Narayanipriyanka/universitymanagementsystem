@@ -77,7 +77,19 @@ public class StudentController {
         return studentService.getMaterialOfCourse(code);
 
     }
+    @PutMapping("/enroll")
+    @PreAuthorize("hasRole('STUDENT')")
+    @Operation(summary = "enroll incourses", description = "student gets his or her courses enrolled list")
+    public String enrollInCourse(@RequestParam Long courseId,@RequestParam String courseCode){
+       return studentService.enrollInCourse(courseId,courseCode);
+    }
 
+    @PutMapping("/courses")
+    @PreAuthorize("hasRole('STUDENT')")
+    @Operation(summary = "get all available courses", description = "student gets his or her courses enrolled list")
+    public List<Course> getCourses(){
+        return studentService.getAllAvailableCourses();
+    }
     @PostMapping(path = "/upload/csv", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "get students information", description = "for all students information this is only for admins")

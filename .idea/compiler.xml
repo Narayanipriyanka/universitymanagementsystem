@@ -20,6 +20,7 @@
         <module name="library-service" />
         <module name="grade-service" />
         <module name="events" />
+        <module name="exam-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -38,6 +39,7 @@
       <module name="department-service" options="-parameters" />
       <module name="enrollment-service" options="-parameters" />
       <module name="events" options="-parameters" />
+      <module name="exam-service" options="-parameters" />
       <module name="faculty-service" options="-parameters" />
       <module name="feemanagement-service" options="-parameters" />
       <module name="grade-service" options="-parameters" />

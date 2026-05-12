@@ -1,6 +1,7 @@
 package com.example.libraryservice.service;
 
 import com.example.events.BookCollectEvent;
+import com.example.events.PayFeesEvent;
 import com.example.libraryservice.dto.BookDTO;
 import com.example.libraryservice.entity.*;
 import com.example.libraryservice.repository.BookRecordRepoistory;
@@ -126,6 +127,8 @@ public class LibraryService {
                 repository.save(b);
                 record.setReturned(true);
                 record.setReturnDate(LocalDate.now());
+                PayFeesEvent feesEvent=new PayFeesEvent(studentId,record.getFine(),"LIBRARY_FEE");
+                kafkaTemplate.send("payFees",feesEvent);
                 return "pay "+record.getFine()+" for late return ";
             }
         }
