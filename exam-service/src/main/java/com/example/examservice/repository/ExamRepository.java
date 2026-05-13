@@ -10,4 +10,6 @@ import java.util.List;
 public interface ExamRepository extends JpaRepository<Exam,Long> {
 
     List<Exam> findAllByProgramCodeAndDeptCode(String programCode, String deptCode);
+
+    List<Exam> findByExam(String examName);
 }

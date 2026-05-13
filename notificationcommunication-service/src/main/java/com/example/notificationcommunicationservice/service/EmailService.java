@@ -188,4 +188,13 @@ public class EmailService {
         mailMessage.setText("This is to inform you that ,Your fee balance is overdue by Rs."+request.getTotalBalance() +"The detailed fee balance deatials are given below:\n Tution fee Balance:Rs"+request.getTutionFeeBalance()+"\n Hostel Fee Balance:Rs"+request.getHostelFeeBalance()+"\nExam Fee balance:Rs"+request.getExamFeeBalance()+"\n Mess Fee Balance :Rs"+request.getMessFeeBalance()+"Records Fee Balance:Rs"+request.getRecordFeeBalance()+" kindly pay the fee and clear the balance as soon as possible to avoid the prohibitons and breakages in course exams  \n thank you \n university team");
         mailSender.send(mailMessage);
     }
+
+    public void sendExamHallDetails(String email, ExamHallDetailsEvent request) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi student,check your Exam Hall and seatNo of Your upcoming Exam here !");
+        mailMessage.setText("This is to inform you that ,Your Exam Hall No is"+request.getHallNo() +"\n seat No is:"+request.getSeatNo()+"\n Your Exam Hall is in"+request.getFloorNo()+"st Floor in University Examination Building \n All the best for your exam \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
 }

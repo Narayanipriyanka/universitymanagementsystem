@@ -113,13 +113,17 @@ public class NotificationConsumer {
         emailService.sendPaymentLink(s.getEmail(),request);
     }
     @KafkaListener(topics="sendOverDueAlert",groupId="notification-sendOverDueAlert-group")
-    public void consumeOverDueALert(OverDueAlert request) throws Exception {
+    public void consumeOverDueAlert(OverDueAlert request) throws Exception {
         StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found with this id"));
        ParentDetails p=parentRepository.findByStudentId(request.getStudentId());
        emailService.sendOverDueAlert(s.getEmail(),request);
        emailService.sendOverDueAlert(p.getEmail(),request);
     }
-
+    @KafkaListener(topics="sendExamHallDetails",groupId="notification-sendExamHallDetails-group")
+    public void consumeExamHallDetails(ExamHallDetailsEvent request) throws Exception {
+        StudentDetails s=studentDetailsRepository.findById(request.getStudentId()).orElseThrow(()->new RuntimeException("no student found with this id"));
+        emailService.sendExamHallDetails(s.getEmail(),request);
+    }
 
 
 

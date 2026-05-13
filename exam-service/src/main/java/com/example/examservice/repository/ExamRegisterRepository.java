@@ -1,12 +1,11 @@
 package com.example.examservice.repository;
 
 import com.example.examservice.entity.ExamFeeDetails;
+import com.example.examservice.entity.ExamRegister;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface ExamFeeDetailsRepository extends JpaRepository<ExamFeeDetails,Long> {
-    List<ExamFeeDetails> findBySemesterAndProgramCode(Integer semster, String programCode);
+public interface ExamRegisterRepository extends JpaRepository<ExamRegister,Long> {
+    ExamRegister findByExamName(String exam);
 }
