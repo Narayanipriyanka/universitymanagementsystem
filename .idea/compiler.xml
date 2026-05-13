@@ -9,6 +9,8 @@
         <module name="Attendance-Service" />
         <module name="department-service" />
         <module name="faculty-service" />
+        <module name="analyticsreport-service" />
+        <module name="timtable-service" />
         <module name="enrollment-service" />
         <module name="course-service" />
         <module name="auth-service" />
@@ -31,6 +33,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Attendance-Service" options="-parameters" />
       <module name="Hostel-service" options="-parameters" />
+      <module name="analyticsreport-service" options="-parameters" />
       <module name="apigateway-service" options="-parameters" />
       <module name="auth-service" options="-parameters" />
       <module name="auth-service.main" options="-parameters" />
@@ -47,6 +50,7 @@
       <module name="library-service" options="-parameters" />
       <module name="notificationcommunication-service" options="-parameters" />
       <module name="student-service" options="-parameters" />
+      <module name="timtable-service" options="-parameters" />
     </option>
   </component>
 </project>

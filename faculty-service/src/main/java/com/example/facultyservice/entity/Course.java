@@ -8,13 +8,31 @@ public class Course {
     @GeneratedValue
     private Long id;
     private String courseName;
+    private String courseCode;
     private Integer semester;
     private String program;
+    private String deptCode;
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
     @Enumerated
     private CourseAllocationStatus status;
+
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
+    }
 
     public Integer getSemester() {
         return semester;

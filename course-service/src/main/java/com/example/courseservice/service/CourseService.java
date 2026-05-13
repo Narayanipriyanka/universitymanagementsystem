@@ -89,8 +89,8 @@ public String addSection(SectionDTO dto){
     s.setCapacity(dto.getCapacity());
     s.setCourseCode(dto.getCourseCode());
     sectionRepository.save(s);
-    SectionEvent dto=new SectionEvent(s.getSectionId(),s.getCapacity(),s.getRoom(),s.getCourseCode());
-    kafkaTemplate.send("sendSections",dto);
+    SectionEvent event=new SectionEvent(s.getSectionId(),s.getCapacity(),s.getRoom(),s.getCourseCode());
+    kafkaTemplate.send("sendSections",event);
     return "section added successfully";
 
 }

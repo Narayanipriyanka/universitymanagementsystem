@@ -52,7 +52,9 @@ private CourseRepository courseRepository;
         Course c=new Course();
         c.setSemester(request.getSemester());
         c.setCourseName(request.getCourseName());
+        c.setCourseCode(request.getCode());
         c.setProgram(request.getProgram());
+        c.setDeptCode(request.getDeptCode());
         c.setStatus(CourseAllocationStatus.PENDING);
         courseRepository.save(c);
     }

@@ -1,7 +1,5 @@
 package com.example.facultyservice.service;
-import com.example.events.FacultyCreatedEvent;
-import com.example.events.PayslipGeneratedEvent;
-import com.example.events.RegisterRequest;
+import com.example.events.*;
 import com.example.facultyservice.dto.FacultyProfileDTO;
 import com.example.facultyservice.dto.PaySlipDTO;
 import com.example.facultyservice.dto.QualificationDto;
@@ -125,6 +123,8 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
     }
     public String addOfficeHours(OfficeHours hours){
         officeHoursRepository.save(hours);
+        OfficeHoursEvent dto=new OfficeHoursEvent(hours.getFacultyId(),hours.getLoginTime(),hours.getLogoutTime(),hours.getLiesurePeriod());
+        kafkaTemplate.send("sendOfficeHours",dto);
         return "office hours added successfully for"+hours.getFacultyId();
     }
     public OfficeHours getOfficeHoursOfAFaculty(UUID facultyId){
@@ -202,6 +202,8 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
        c.setFaculty(f);
        c.setStatus(CourseAllocationStatus.ALLOCATED);
        courseRepository.save(c);
+       FacultyCourseEvent e=new FacultyCourseEvent(facultyId,f.getFirstname(),courseId,c.getProgram(),c.getSemester(),c.getDeptCode(),c.getCourseCode());
+       kafkaTemplate.send("facultyCourse",e);
        return "course "+c.getCourseName()+" is allocated to "+f.getFirstname()+"successfully";
     }
 

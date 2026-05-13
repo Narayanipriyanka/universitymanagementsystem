@@ -28,6 +28,7 @@ public class FacultyController {
     @Autowired
     private FacultyService facultyService;
     @GetMapping("/{email}")
+     @PreAuthorize("hasRole('FACULTY')")
     @Operation(summary = "get faculty id", description = "faculty can get their faculty id jsut by entering their email id here ")
     public UUID getFacultyId(@RequestParam String email){
         return facultyService.getFacultyID(email);
