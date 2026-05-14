@@ -79,29 +79,138 @@ spring:
           filters:
             - RewritePath=/v3/api-docs/department,/v3/api-docs
         - id: grade-service
-          uri: http://localhost:809
+          uri: http://localhost:8094
           predicates:
             - Path=/grade/**
           filters:
             - TokenRelay
-        - id: department-docs
-          uri: http://localhost:8086
+        - id: grade-docs
+          uri: http://localhost:8094
           predicates:
-            - Path=/v3/api-docs/department
+            - Path=/v3/api-docs/grade
           filters:
-            - RewritePath=/v3/api-docs/department,/v3/api-docs
-        - id: department-service
-          uri: http://localhost:8086
+            - RewritePath=/v3/api-docs/grade,/v3/api-docs
+        - id: analyticsreport-service
+          uri: http://localhost:8099
           predicates:
-            - Path=/department/**
+            - Path=/analytics/**
           filters:
             - TokenRelay
-        - id: department-docs
-          uri: http://localhost:8086
+        - id: analyticsreport-docs
+          uri: http://localhost:8099
           predicates:
-            - Path=/v3/api-docs/department
+            - Path=/v3/api-docs/analytics
           filters:
-            - RewritePath=/v3/api-docs/department,/v3/api-docs
+            - RewritePath=/v3/api-docs/analytics,/v3/api-docs
+        - id: Attendance-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/attendance/**
+          filters:
+            - TokenRelay
+        - id: Attendance-docs
+          uri: http://localhost:8087
+          predicates:
+            - Path=/v3/api-docs/attendance
+          filters:
+            - RewritePath=/v3/api-docs/attendance,/v3/api-docs
+        - id: course-service
+          uri: http://localhost:8098
+          predicates:
+            - Path=/course/**
+          filters:
+            - TokenRelay
+        - id: course-docs
+          uri: http://localhost:8099
+          predicates:
+            - Path=/v3/api-docs/course
+          filters:
+            - RewritePath=/v3/api-docs/course,/v3/api-docs
+        - id: enrollment-service
+          uri: http://localhost:8092
+          predicates:
+            - Path=/enrollment/**
+          filters:
+            - TokenRelay
+        - id: enrollment-docs
+          uri: http://localhost:8092
+          predicates:
+            - Path=/v3/api-docs/enrollment
+          filters:
+            - RewritePath=/v3/api-docs/enrollment,/v3/api-docs
+        - id: exam-service
+          uri: http://localhost:8096
+          predicates:
+            - Path=/exam/**
+          filters:
+            - TokenRelay
+        - id: exam-docs
+          uri: http://localhost:8096
+          predicates:
+            - Path=/v3/api-docs/exam
+          filters:
+            - RewritePath=/v3/api-docs/exam,/v3/api-docs
+        - id: feemanagement-service
+          uri: http://localhost:8095
+          predicates:
+            - Path=/fees/**
+          filters:
+            - TokenRelay
+        - id: feemanagement-docs
+          uri: http://localhost:8095
+          predicates:
+            - Path=/v3/api-docs/fees
+          filters:
+            - RewritePath=/v3/api-docs/fees,/v3/api-docs
+        - id: Hostel-service
+          uri: http://localhost:8093
+          predicates:
+            - Path=/hostel/**
+          filters:
+            - TokenRelay
+        - id: Hostel-docs
+          uri: http://localhost:8093
+          predicates:
+            - Path=/v3/api-docs/hostel
+          filters:
+            - RewritePath=/v3/api-docs/hostel,/v3/api-docs
+        - id: library-service
+          uri: http://localhost:8091
+          predicates:
+            - Path=/library/**
+          filters:
+            - TokenRelay
+        - id: library-docs
+          uri: http://localhost:8091
+          predicates:
+            - Path=/v3/api-docs/library
+          filters:
+            - RewritePath=/v3/api-docs/library,/v3/api-docs
+        - id: notificationcommunication-service
+          uri: http://localhost:8089
+          predicates:
+            - Path=/notification/**
+          filters:
+            - TokenRelay
+        - id: notificationcommunication-docs
+          uri: http://localhost:8089
+          predicates:
+            - Path=/v3/api-docs/notification
+          filters:
+            - RewritePath=/v3/api-docs/notification,/v3/api-docs
+        - id: timetable-service
+          uri: http://localhost:8097
+          predicates:
+            - Path=/timetable/**
+          filters:
+            - TokenRelay
+        - id: timetable-docs
+          uri: http://localhost:8097
+          predicates:
+            - Path=/v3/api-docs/timetable
+          filters:
+            - RewritePath=/v3/api-docs/timetable,/v3/api-docs
+
 springdoc:
   swagger-ui:
     persist-authorization: true
@@ -119,6 +228,27 @@ springdoc:
         url: /v3/api-docs/faculty
       - name: department-service
         url: /v3/api-docs/department
+      - name: Attendance-service
+        url: /v3/api-docs/attendance
+      - name: analytics-service
+        url: /v3/api-docs/analytics
+      - name: enrollment-service
+        url: /v3/api-docs/enrollment
+      - name: library-service
+        url: /v3/api-docs/library
+      - name: feemanagement-service
+        url: /v3/api-docs/fees
+      - name: course-service
+        url: /v3/api-docs/course
+      - name: grade-service
+        url: /v3/api-docs/grade
+      - name: timetable-service
+        url: /v3/api-docs/timetable
+      - name: Hostel-service
+        url: /v3/api-docs/hostel
+      - name: exam-service
+        url: /v3/api-docs/exam
+
 
   servlet:
     multipart:
