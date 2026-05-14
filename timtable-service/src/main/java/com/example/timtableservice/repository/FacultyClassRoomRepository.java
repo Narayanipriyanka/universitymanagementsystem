@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface FacultyClassRoomRepository extends JpaRepository<FacultyClassRoom,Long> {
@@ -14,4 +15,6 @@ public interface FacultyClassRoomRepository extends JpaRepository<FacultyClassRo
     Boolean existsByRoomNoAndStartTime(String roomNo, LocalTime nextPeriod);
 
     List<FacultyClassRoom> findAllByRoomNo(String roomNo);
+
+    List<FacultyClassRoom> findAllByFacultyId(UUID facultyId);
 }

@@ -45,5 +45,11 @@ public class TimeTableController {
     public String getTimeTable(String roomNo){
         return timeTableService.getTimeTable(roomNo);
     }
+    @GetMapping("/facultyTimeTable")
+    @PreAuthorize("hasRole('FACULTY')")
+    @Operation(summary = "get faculty's classroom timetable", description = "only faculty can get information about classroom no and class timings ")
+    public String getClassRoomTimeTable(UUID facultyId){
+        return timeTableService.getFacultyClassRoom(facultyId);
+    }
 
 }

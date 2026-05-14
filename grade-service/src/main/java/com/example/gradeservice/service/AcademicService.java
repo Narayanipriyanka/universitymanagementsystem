@@ -4,7 +4,6 @@ package com.example.gradeservice.service;
 
 import com.example.events.AcademicsEvent;
 
-import com.example.events.StudentCreatedEvent;
 import com.example.gradeservice.dto.AcademicRecordDTO;
 import com.example.gradeservice.dto.TranscriptDTO;
 import com.example.gradeservice.entity.AcademicsRecord;
@@ -40,17 +39,18 @@ public class AcademicService {
             String[] data=line.split(",");
             AcademicsRecord s=new AcademicsRecord();
             s.setStudentId(UUID.fromString(data[0]));
-            s.setSubject(data[1]);
+            s.setCourse(data[1]);
             s.setSemester(Integer.parseInt(data[2]));
             s.setMidMarks(Double.parseDouble(data[3]));
             s.setQuizMarks(Double.parseDouble(data[4]));
             s.setLabMarks(Double.parseDouble(data[5]));
             s.setFinalExamMarks(Double.parseDouble(data[6]));
+            s.setProgramCode(data[7]);
             s.setTotalMarks(Double.parseDouble(data[3])+Double.parseDouble(data[4])+Double.parseDouble(data[5]));
             s.setGrade(calculateGrade(Double.parseDouble(data[3])+Double.parseDouble(data[4])+Double.parseDouble(data[5])));
             s.setPass(!calculateGrade(Double.parseDouble(data[3])+Double.parseDouble(data[4])+Double.parseDouble(data[5])).equals("F"));
             academicsRecords.add(s);
-            AcademicsEvent dto=new AcademicsEvent(UUID.fromString(data[0]),data[1],s.getTotalMarks(),s.getSemester(), s.getGrade(),s.getPass());
+            AcademicsEvent dto=new AcademicsEvent(UUID.fromString(data[0]),data[1], s.getProgramCode(), s.getTotalMarks(),s.getSemester(), s.getGrade(),s.getPass());
             kafkaTemplate.send("sendAcademics",dto);
         }
         return academicsRepository.saveAll(academicsRecords);
@@ -58,15 +58,16 @@ public class AcademicService {
     public AcademicsRecord addRecord(AcademicRecordDTO academicRecordDTO){
         AcademicsRecord record=new AcademicsRecord();
         record.setStudentId(academicRecordDTO.getStudentId());
-        record.setSubject(academicRecordDTO.getSubject());
+        record.setCourse(academicRecordDTO.getSubject());
         record.setSemester(academicRecordDTO.getSemester());
+        record.setProgramCode(academicRecordDTO.getProgramCode());
         record.setTotalMarks(academicRecordDTO.getMidMarks()+ academicRecordDTO.getFinalExamMarks()+ academicRecordDTO.getQuizMarks());
         record.setLabMarks(academicRecordDTO.getLabMarks());
         record.setMidMarks(academicRecordDTO.getMidMarks());
         record.setQuizMarks(academicRecordDTO.getQuizMarks());
         record.setGrade(calculateGrade(academicRecordDTO.getLabMarks()+academicRecordDTO.getFinalExamMarks()+academicRecordDTO.getQuizMarks()));
         record.setPass(!calculateGrade(academicRecordDTO.getLabMarks() + academicRecordDTO.getFinalExamMarks() + academicRecordDTO.getQuizMarks()).equals("F"));
-        AcademicsEvent dto=new AcademicsEvent(record.getStudentId(),record.getSubject(),record.getMarks(),record.getSemester(),record.getGrade(),record.getPass());
+        AcademicsEvent dto=new AcademicsEvent(record.getStudentId(),record.getCourse(),record.getProgramCode(),record.getMarks(),record.getSemester(),record.getGrade(),record.getPass());
         kafkaTemplate.send("sendAcademics",dto);
         return academicsRepository.save(record);
     }
@@ -78,7 +79,7 @@ public class AcademicService {
         StringBuilder result= new StringBuilder();
         for(AcademicsRecord r:records){
             if(Objects.equals(r.getSemester(), semester)){
-                result.append("Subject:").append(r.getSubject()).append(" marks:").append(r.getTotalMarks()).append("status:").append(r.getPass()?"PASS":"FAIL").append("\n");
+                result.append("Subject:").append(r.getCourse()).append(" marks:").append(r.getTotalMarks()).append("status:").append(r.getPass()?"PASS":"FAIL").append("\n");
             }
         }
         return result.toString();
@@ -100,7 +101,7 @@ public class AcademicService {
                 fail++;
             }
         }
-        return "overall pass percentage is "+pass/records.size()*100+"%\n overall failure percentage is "+fail/records.size()*100+"%";
+        return "overall pass percentage is "+(pass/records.size())*100+"%\n overall failure percentage is "+(fail/records.size())*100+"%";
     }
     private String calculateGrade(Double marks){
         if (marks >= 90) return "A+";

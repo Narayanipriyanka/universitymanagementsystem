@@ -35,6 +35,7 @@ public class CourseConsumer {
     c.setCourseCode(event.getCode());
     c.setProgram(event.getProgram());
     c.setSemester(c.getSemester());
+    c.setDeptCode(event.getDeptCode());
     repository.save(c);
     }
     @KafkaListener(topics="sendSyllabus",groupId="student-syllabus-group")
@@ -47,7 +48,9 @@ public class CourseConsumer {
     @KafkaListener(topics="sendMaterial",groupId="student-Material-group")
     public void consume(MaterialEvent event){
         Course c=repository.findByCourseCode(event.getCourseCode());
-        c.setMaterialPaths(event.getFilePath());
+        List<String> paths=c.getMaterialPaths();
+        paths.add(event.getFilePath());
+        c.setMaterialPaths(paths);
         repository.save(c);
 
     }

@@ -7,7 +7,7 @@ public class AcademicRecordDTO {
     private UUID studentId;
     private Integer semester;
     private String subject;
-
+    private String programCode;
     private Double midMarks;
     private Double FinalExamMarks;
     private Double quizMarks;
@@ -20,6 +20,13 @@ public class AcademicRecordDTO {
         return semester;
     }
 
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
+    }
 
     public Double getMidMarks() {
         return midMarks;

@@ -1,26 +1,34 @@
-package com.example.events;
+package com.example.analyticsreportservice.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.util.UUID;
 
-public class AcademicsEvent {
+@Entity
+public class AcademicsDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private UUID studentId;
     private Integer semester;
-    private String subject;
+    private String course;
     private String programCode;
     private String grade;
     private Double marks;
     private Boolean isPass;
-    public AcademicsEvent(UUID studentId, String subject, String programCode, Double marks, Integer semester, String grade, Boolean isPass) {
-    this.grade=grade;
-    this.studentId=studentId;
-    this.marks=marks;
-    this.programCode=programCode;
-    this.semester=semester;
-    this.subject=subject;
-    this.isPass=isPass;}
-
     public UUID getStudentId() {
         return studentId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProgramCode() {
@@ -59,18 +67,17 @@ public class AcademicsEvent {
         this.grade = grade;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getCourse() {
+        return course;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setCourse(String course) {
+        this.course = course;
     }
 
     public Integer getSemester() {
         return semester;
     }
-
 
 
     public void setStudentId(UUID studentId) {

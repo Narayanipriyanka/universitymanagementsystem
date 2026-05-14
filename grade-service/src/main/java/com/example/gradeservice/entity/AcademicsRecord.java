@@ -15,16 +15,25 @@ public class AcademicsRecord {
     private Long id;
     private UUID studentId;
     private Integer semester;
-    private String subject;
+    private String course;
     private Double midMarks;
     private Double FinalExamMarks;
     private Double quizMarks;
     private Double LabMarks;
     private String grade;
     private Double totalMarks;
+    private String programCode;
     private Boolean isPass;
     public Integer getSemester() {
         return semester;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public Boolean getPass() {
@@ -39,8 +48,8 @@ public class AcademicsRecord {
         this.semester = semester;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getCourse() {
+        return course;
     }
 
     public Double getMidMarks() {
@@ -99,8 +108,8 @@ public class AcademicsRecord {
         this.grade = grade;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setCourse(String course) {
+        this.course = course;
     }
 
     public UUID getStudentId() {

@@ -7,7 +7,9 @@ import com.example.attendanceservice.entity.FacultyDetails;
 import com.example.attendanceservice.repository.AttendanceReportRepository;
 import com.example.attendanceservice.repository.AttendanceRepository;
 import com.example.attendanceservice.repository.FacultyDetailsRepository;
+import com.example.events.AttendanceReportEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -26,6 +28,12 @@ public class AttendanceService {
     private AttendanceReportRepository attendanceReportRepository;
 @Autowired
 private FacultyDetailsRepository facultyDetailsRepository;
+private final KafkaTemplate<String,Object> kafkaTemplate;
+
+    public AttendanceService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
     public String addAttendance(){
         String username=getUserName();
         FacultyDetails f=facultyDetailsRepository.findByUsername(username);
@@ -63,6 +71,8 @@ private FacultyDetailsRepository facultyDetailsRepository;
         List<AttendanceReport> ar=attendanceReportRepository.findAllByFacultyId(facultyId);
         for(AttendanceReport a:ar){
             if(a.getMonth().equalsIgnoreCase(month)){
+                AttendanceReportEvent e=new AttendanceReportEvent(a.getAttendancePercentage(),a.getFacultyId(),a.getMonth(),a.getAbsent(),a.getPresent(),a.getTotalDays(),a.getLeave());
+                kafkaTemplate.send("sendAttendance",e);
                 return a;
             }
         }

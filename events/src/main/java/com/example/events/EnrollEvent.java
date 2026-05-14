@@ -4,14 +4,34 @@ import java.util.UUID;
 
 public class EnrollEvent {
     private UUID studentId;
+    private Long courseId;
     private String program;
     private String courseCode;
     private Integer semester;
-    public EnrollEvent(UUID id, String program, Integer semester, String courseCode) {
+    private String deptCode;
+    public EnrollEvent(UUID id, String deptCode, Long cId, String program, Integer semester, String courseCode) {
         this.courseCode=courseCode;
+        this.courseId=cId;
         this.program=program;
         this.studentId=id;
         this.semester=semester;
+        this.deptCode=deptCode;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     public UUID getStudentId() {

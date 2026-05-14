@@ -152,7 +152,7 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
         students.add(s);
         c.setStudents(students);
         courseRepository.save(c);
-        EnrollEvent e=new EnrollEvent(s.getId(),c.getProgram(),c.getSemester(),c.getCourseCode());
+        EnrollEvent e=new EnrollEvent(s.getId(),c.getDeptCode(),c.getId(),c.getProgram(),c.getSemester(),c.getCourseCode());
         kafkaTemplate.send("enrollCourse",e);
     }
     return "enrolled in "+courseCode+" successfully";

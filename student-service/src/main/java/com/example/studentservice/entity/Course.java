@@ -11,6 +11,7 @@ public class Course {
     private Long id;
     private String courseCode;
     private String program;
+    private String deptCode;
     private List<String> materialPaths;
     private String syllabusPath;
     @ManyToMany(mappedBy = "courses")
@@ -21,6 +22,14 @@ public class Course {
 
     public void setSemester(Integer semester) {
         this.semester = semester;
+    }
+
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode;
     }
 
     public Long getId() {

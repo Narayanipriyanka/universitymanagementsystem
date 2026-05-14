@@ -70,8 +70,15 @@ public class TimeTableService {
             LocalTime nextPeriod = officeHour.getLoginTime();
             for (ClassRoom classRoom : c) {
                 Boolean allocated = facultyClassRoomRepository.existsByRoomNoAndStartTime(classRoom.getRoomNo(), nextPeriod);
-                if (nextPeriod.isAfter(officeHour.getLogoutTime()) && allocated) {
+                if (nextPeriod.isAfter(officeHour.getLogoutTime())) {
                     break;
+                }
+                if(officeHour.getLiesurePeriod().equals(nextPeriod)){
+                    nextPeriod = nextPeriod.plusMinutes(60);
+                    continue;
+                }
+                if(allocated){
+                    continue;
                 }
                 if (officeHour.getLiesurePeriod() != nextPeriod) {
                     FacultyClassRoom facultyClassRoom = new FacultyClassRoom();
@@ -106,5 +113,13 @@ public class TimeTableService {
 
         return timeTable.toString();
     }
+    public String getFacultyClassRoom(UUID facultyId){
+        List<FacultyClassRoom> facultyClassRooms=facultyClassRoomRepository.findAllByFacultyId(facultyId);
+        StringBuilder timeTable= new StringBuilder("Room No\t\t\tstarttime\t\t\tendTime");
+        for(FacultyClassRoom classRoom:facultyClassRooms){
+            timeTable.append("\n").append(classRoom.getRoomNo()).append("\t\t\t").append(classRoom.getStartTime()).append("\t\t\t").append(classRoom.getEndTime());
+        }
 
+        return timeTable.toString();
+    }
 }
