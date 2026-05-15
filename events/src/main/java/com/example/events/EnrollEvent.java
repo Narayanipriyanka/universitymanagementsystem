@@ -9,6 +9,9 @@ public class EnrollEvent {
     private String courseCode;
     private Integer semester;
     private String deptCode;
+    public EnrollEvent(){
+
+    }
     public EnrollEvent(UUID id, String deptCode, Long cId, String program, Integer semester, String courseCode) {
         this.courseCode=courseCode;
         this.courseId=cId;

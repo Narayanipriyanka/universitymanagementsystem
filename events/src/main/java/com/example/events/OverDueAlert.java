@@ -11,6 +11,9 @@ public class OverDueAlert {
     private Double messFeeBalance;
     private Double totalBalance;
     private Double recordFeeBalance;
+    public OverDueAlert(){
+
+    }
     public OverDueAlert(UUID studentId, Double paid, Double tutionFeeBalance, Double examFeeBalance, Double hostelFeeBalance, Double recordFeeBalance, Double messFeeBalance, Double totalbalance) {
     this.studentId=studentId;
     this.paid=paid;

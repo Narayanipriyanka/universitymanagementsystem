@@ -6,7 +6,9 @@ public class LeaveEvent {
     private UUID facultyId;
     private String email;
     private String status;
+public LeaveEvent(){
 
+}
     public LeaveEvent(UUID facultyId, String email, String leaveStatus) {
         this.email=email;
         this.facultyId=facultyId;

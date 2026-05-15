@@ -3,7 +3,9 @@ package com.example.events;
 public class LowAttendanceAlert {
     private String email;
     private int percentage;
+public LowAttendanceAlert(){
 
+}
     public LowAttendanceAlert(String email, int percentage) {
         this.email=email;
         this.percentage=percentage;

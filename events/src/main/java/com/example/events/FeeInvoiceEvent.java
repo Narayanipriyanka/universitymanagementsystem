@@ -10,7 +10,9 @@ public class FeeInvoiceEvent {
     private Double amountPaid;
     private Double balance;
     private Double totalBalance;
+public FeeInvoiceEvent(){
 
+}
     public FeeInvoiceEvent(UUID studentId, String category, Double amount, Double categoryBalance, Double totalbalance,LocalDate paidDate) {
     this.studentId=studentId;
     this.totalBalance=totalbalance;

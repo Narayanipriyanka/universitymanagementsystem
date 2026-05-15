@@ -1,5 +1,6 @@
 package com.example.hostelservice.service;
 
+import com.example.events.PayFeesEvent;
 import com.example.hostelservice.dto.HostelDTO;
 import com.example.hostelservice.dto.MessDTO;
 import com.example.hostelservice.dto.RoomDTO;
@@ -7,6 +8,7 @@ import com.example.hostelservice.dto.VisitorDTO;
 import com.example.hostelservice.entity.*;
 import com.example.hostelservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,8 +28,14 @@ public class HostelService {
     private MealRepsoitory mealRepsoitory;
     @Autowired
     private RoomAllocationRepository allocationRepository;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
 @Autowired
 private VisitorLogsRepository visitorLogsRepository;
+
+    public HostelService(KafkaTemplate<String, Object> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
     public String addHostel(HostelDTO dto){
         Hostel h=new Hostel();
         h.setFee(dto.getFee());
@@ -93,6 +101,8 @@ private VisitorLogsRepository visitorLogsRepository;
                 a.setStudentId(studentId);
                 a.setRoomNo(r.getRoomNo());
                 allocationRepository.save(a);
+                PayFeesEvent feesEvent=new PayFeesEvent(studentId,r.getHostel().getFee(),"HOSTEL_FEE");
+                kafkaTemplate.send("payFees",feesEvent);
                 break;
             }
         }
@@ -139,6 +149,8 @@ private VisitorLogsRepository visitorLogsRepository;
                 studentIds.add(studentId);
                 mess.setStudentIds(studentIds);
                 messRepository.save(mess);
+                PayFeesEvent feesEvent=new PayFeesEvent(studentId,mess.getMonthlyFee(),"MESS_FEE");
+                kafkaTemplate.send("payFees",feesEvent);
                 return "mess selected successfully your mess id is"+mess.getId();
             }
         }

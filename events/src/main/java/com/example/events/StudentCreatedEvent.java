@@ -8,6 +8,9 @@ public class StudentCreatedEvent {
     private String password;
     private String studentStatus;
 private UUID studentId;
+public StudentCreatedEvent(){
+
+}
     public StudentCreatedEvent(UUID id, String email, String username, String password, String studentStatus) {
         this.studentId=id;
         this.email=email;

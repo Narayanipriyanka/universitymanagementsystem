@@ -24,7 +24,29 @@ public class KafkaConfig {
     public NewTopic paymentLinkTopic(){
         return new NewTopic("enrollCourse",1,(short) 1);
     }
-
+    @Bean
+    public NewTopic sendStudentCreatedTopic(){
+        return new NewTopic("sendStudentCreated",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendSyllabusTopic(){
+        return new NewTopic("sendSyllabusEmail",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendMaterialTopic(){
+        return new NewTopic("sendMaterialEmail",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendParentTopic(){
+        return new NewTopic("sendParent",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendScholarshipTopic(){
+        return new NewTopic("sendScholarship",1,(short) 1);
+    }
+    @Bean NewTopic sendIdcardTopic(){
+        return new NewTopic("sendIdcard",1,(short) 1);
+    }
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> props = new HashMap<>();
@@ -39,7 +61,7 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory());
     }
     @Bean
-    public ConsumerFactory<String, RegisterRequest> consumerFactory() {
+    public ConsumerFactory<String,Object> consumerFactory() {
 
         Map<String, Object> props = new HashMap<>();
 
@@ -47,18 +69,18 @@ public class KafkaConfig {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "student-group");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        JsonDeserializer<RegisterRequest> deserializer = new JsonDeserializer<>(RegisterRequest.class, false);
+        JsonDeserializer<Object> deserializer = new JsonDeserializer<>(Object.class);
 
         deserializer.addTrustedPackages("com.example.events");
-
+        deserializer.setUseTypeMapperForKey(false);
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer
         );
     }
 
     @Bean(name = "kafkaListenerContainerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, RegisterRequest> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String,Object> kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, RegisterRequest> factory =
+        ConcurrentKafkaListenerContainerFactory<String,Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory());

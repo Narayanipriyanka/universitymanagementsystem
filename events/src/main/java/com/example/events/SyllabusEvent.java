@@ -7,7 +7,9 @@ public class SyllabusEvent {
     private UUID id;
     private String filePath;
    private String courseCode;
+public SyllabusEvent(){
 
+}
     public SyllabusEvent(String syllabusPath, String code) {
         this.filePath=syllabusPath;
         this.courseCode=code;

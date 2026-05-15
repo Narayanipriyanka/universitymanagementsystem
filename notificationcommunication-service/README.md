@@ -13,6 +13,14 @@ Api gateway running on :8089
 key cloak running on 8080
 kafka running on 9092
 
+## depends on
+ students service-student,parent details
+ faculty-servcie-faculty details
+ course-service- for course syllabus,materials details
+ attendansce-service -for faculty attednance
+ feemanagement-servcie -for paymnet info
+ library-service -for books,resources
+ grade-service -for academics
 ## setup
 this service has some automatic email sending mechanism where it consumes events like ID card generated event,leave event ,etc.. based on the event 
 consumed it is redirected to emailsender and sends the appropriate mail related to the event consumed automatically to the respective user

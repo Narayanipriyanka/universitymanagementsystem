@@ -3,7 +3,9 @@ package com.example.events;
 public class IdCardEvent {
     private String email;
     private String filePath;
+public IdCardEvent(){
 
+}
     public IdCardEvent(String email, String filePath) {
     this.email=email;
     this.filePath=filePath;}

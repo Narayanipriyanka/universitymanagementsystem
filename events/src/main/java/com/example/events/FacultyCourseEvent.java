@@ -10,6 +10,9 @@ public class FacultyCourseEvent {
    private String programCode;
    private String deptCode;
    private String courseCode;
+   public FacultyCourseEvent(){
+
+   }
     public FacultyCourseEvent(UUID facultyId, String firstname, Long courseId, String program, Integer semester, String deptCode, String courseCode) {
         this.courseId=courseId;
         this.facultyId=facultyId;

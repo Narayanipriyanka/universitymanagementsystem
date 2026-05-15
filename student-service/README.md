@@ -21,6 +21,10 @@ student-service running on :8083
 key cloak running on 8080
 kafka running on 9092
 
+## depends on
+ course-service -for all courses list
+ auth-service -for student registration
+ 
 ## setup
 to access any of the api presnt in the student service
 one must click on authorize symbol in the swagger and login 

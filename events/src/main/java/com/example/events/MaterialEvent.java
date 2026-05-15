@@ -7,7 +7,8 @@ public class MaterialEvent {
     private UUID id;
     private String filePath;
     private String courseCode;
-
+    public MaterialEvent() {
+    }
     public MaterialEvent(String materialPath, String courseCode,String email,UUID id) {
         this.filePath=materialPath;
         this.courseCode=courseCode;

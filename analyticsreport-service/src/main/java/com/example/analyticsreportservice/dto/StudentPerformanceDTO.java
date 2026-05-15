@@ -30,13 +30,6 @@ public class StudentPerformanceDTO {
         this.overAllPerformnce = overAllPerformnce;
     }
 
-    public String getOverAll() {
-        return overAll;
-    }
-
-    public void setOverAll(String overAll) {
-        this.overAll = overAll;
-    }
 
     public Integer getTotalFailedStudents() {
         return totalFailedStudents;

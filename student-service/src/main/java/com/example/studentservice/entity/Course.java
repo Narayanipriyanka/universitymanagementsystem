@@ -1,5 +1,6 @@
 package com.example.studentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,7 +15,13 @@ public class Course {
     private String deptCode;
     private List<String> materialPaths;
     private String syllabusPath;
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany
+    @JoinTable(
+            name = "student_courses",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    @JsonManagedReference
     private List<Student> students;
     public Integer getSemester() {
         return semester;

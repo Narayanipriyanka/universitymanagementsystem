@@ -6,7 +6,9 @@ public class PayslipGeneratedEvent {
     private Double earnings;
     private Double deductions;
     private Double netPay;
-
+public PayslipGeneratedEvent(){
+    
+}
     public PayslipGeneratedEvent(Double earnings, String month, Double deductions, Double netPay, String transactionId) {
     this.earnings=earnings;
     this.month=month;

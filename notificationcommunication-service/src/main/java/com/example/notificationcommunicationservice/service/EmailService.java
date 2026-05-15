@@ -108,6 +108,10 @@ public class EmailService {
         helper.setSubject("Hi,Materials for the course "+code+" is here");
         helper.setText("Here is the material for your "+code+" course. Download attached file.");
         File file = new File(filePath);
+        if (!file.exists()) {
+            throw new RuntimeException("File not found: " + filePath);
+        }
+
         helper.addAttachment(file.getName(), file);
         mailSender.send(message);
     }

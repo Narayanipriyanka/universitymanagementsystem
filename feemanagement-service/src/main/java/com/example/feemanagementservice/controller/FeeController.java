@@ -6,6 +6,7 @@ import com.example.feemanagementservice.entity.PaymentFor;
 import com.example.feemanagementservice.service.FeesService;
 import com.razorpay.RazorpayException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/fees")
+@Tag(name = "University fee payment controller")
 public class FeeController {
     @Autowired
     private FeesService feesService;

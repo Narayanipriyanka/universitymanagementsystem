@@ -10,7 +10,9 @@ public class AttendanceReportEvent {
     private Integer absent;
     private Integer leave;
     private Integer attendancePercentage;
+public AttendanceReportEvent(){
 
+}
     public AttendanceReportEvent(Integer attendancePercentage, UUID facultyId, String month, Integer absent, Integer present, Integer totalDays, Integer leave) {
     this.facultyId=facultyId;
     this.month=month;

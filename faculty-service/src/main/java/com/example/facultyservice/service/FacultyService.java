@@ -193,7 +193,7 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
         facultyRepository.save(f);
         return "profile created successfully for faculty "+f.getFirstname();
     }
-    public Course getPendingCourses(){
+    public List<Course> getPendingCourses(){
         return courseRepository.findAllByStatus(CourseAllocationStatus.PENDING);
     }
     public String addCourseToFaculty(UUID facultyId,Long courseId){

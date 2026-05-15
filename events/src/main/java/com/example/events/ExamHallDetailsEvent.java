@@ -7,7 +7,9 @@ public class ExamHallDetailsEvent {
     private String hallNo;
     private Long seatNo;
     private Integer floorNo;
+public ExamHallDetailsEvent(){
 
+}
     public ExamHallDetailsEvent(UUID studentId, String hallAllocated, Long seatAllocated, Integer floor) {
     this.studentId=studentId;
     this.hallNo=hallAllocated;

@@ -11,6 +11,9 @@ public class BookCollectEvent {
         this.bookId=bookId;
         this.bookName=bookName;
     }
+    public BookCollectEvent(){
+
+    }
 
     public UUID getStudentId() {
         return studentId;

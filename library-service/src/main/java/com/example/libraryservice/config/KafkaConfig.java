@@ -26,6 +26,10 @@ public class KafkaConfig {
     public NewTopic payFees(){
         return new NewTopic("payFees",1,(short) 1);
     }
+    @Bean
+    public NewTopic bookReturnALert(){
+        return new NewTopic("bookReturnAlert",1,(short) 1);
+    }
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {

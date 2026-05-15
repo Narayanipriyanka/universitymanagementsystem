@@ -8,6 +8,7 @@ import com.example.enrollmentservice.repository.EnrollnmentRepository;
 import com.example.enrollmentservice.repository.SectionRepository;
 import com.example.enrollmentservice.repository.StudentRepository;
 import com.example.events.CourseEnrollEvent;
+import com.example.events.EnrollEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
@@ -33,18 +34,18 @@ private final KafkaTemplate<String,Object> kafkaTemplate;
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public String enrollInCourse(EnrollDTO dto){
+    public void enrollInCourse(EnrollEvent dto){
     Enrollment e=new Enrollment();
     e.setCourseCode(dto.getCourseCode());
-    e.setSem(dto.getSem());
+    e.setSem(dto.getSemester());
     List<UUID> ids=e.getStudentid();
     ids.add(dto.getStudentId());
     e.setStudentid(ids);
-    e.setDeadline(dto.getDeadLine());
+    e.setDeadline(LocalDate.now().plusDays(7));
     enrollnmentRepository.save(e);
         CourseEnrollEvent dtos=new CourseEnrollEvent(e.getCourseCode(),e.getSem(),e.getStudentid());
     kafkaTemplate.send("studentenrolls",dtos);
-    return "enrolled successfully";
+
 }
 public String dropCourse(String courseCode){
         Student s=studentRepository.findByUsername(getUserName());

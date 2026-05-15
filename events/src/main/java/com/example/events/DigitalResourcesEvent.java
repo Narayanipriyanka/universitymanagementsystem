@@ -9,7 +9,9 @@ public class DigitalResourcesEvent {
     private List<String> filePaths;
     private String deptCode;
     private String studentUsername;
+public DigitalResourcesEvent(){
 
+}
     public DigitalResourcesEvent(List<String> filepaths, String courseCode, String userName) {
         this.filePaths=filepaths;
         this.studentUsername=userName;

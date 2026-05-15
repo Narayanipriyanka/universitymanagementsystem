@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,21 +21,13 @@ public class CourseConsumer {
     private CourseRepository repository;
     @Autowired
     private StudentRepository studentRepository;
-    @KafkaListener(topics="studentenrolls",groupId="student-enroll-group")
-    public void consume(CourseEnrollEvent event){
-            List<Student> students=studentRepository.findAllByIdIn(event.getStudentIds());
-            Course c=repository.findByCourseCode(event.getCourseCode());
-            c.setStudents(students);
-            c.setSemester(c.getSemester());
-            repository.save(c);
 
-    }
     @KafkaListener(topics="courses",groupId="student-courses-group")
     public void consume(CourseEvent event){
     Course c=new Course();
     c.setCourseCode(event.getCode());
     c.setProgram(event.getProgram());
-    c.setSemester(c.getSemester());
+    c.setSemester(event.getSemester());
     c.setDeptCode(event.getDeptCode());
     repository.save(c);
     }
@@ -49,6 +42,9 @@ public class CourseConsumer {
     public void consume(MaterialEvent event){
         Course c=repository.findByCourseCode(event.getCourseCode());
         List<String> paths=c.getMaterialPaths();
+        if(paths == null){
+            paths = new ArrayList<>();
+        }
         paths.add(event.getFilePath());
         c.setMaterialPaths(paths);
         repository.save(c);

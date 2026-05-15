@@ -159,7 +159,17 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
     }
 
     public List<Course> getEnrollCourses(UUID studentId) {
-        return courseRepository.findByStudentId(studentId);
+        List<Course> enrolled=new ArrayList<>();
+    List<Course> courses=courseRepository.findAll();
+    for(Course c:courses){
+        for(Student s:c.getStudents()){
+            if(s.getId().equals(studentId)){
+                enrolled.add(c);
+                break;
+            }
+        }
+    }
+    return enrolled;
     }
     private String getUserName(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();

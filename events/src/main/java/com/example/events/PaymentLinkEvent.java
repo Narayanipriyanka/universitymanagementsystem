@@ -6,7 +6,9 @@ public class PaymentLinkEvent {
     private UUID studentId;
     private String paymentlink;
     private Double amount;
+public PaymentLinkEvent(){
 
+}
     public PaymentLinkEvent(UUID studentId, Double amount, String payLink) {
     this.studentId=studentId;
     this.paymentlink=payLink;

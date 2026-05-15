@@ -7,7 +7,9 @@ public class PayFeesEvent {
     private Double amount;
     private String payingFor;
     private Integer semester;
+public PayFeesEvent(){
 
+}
     public PayFeesEvent(UUID studentId, Double fine, String s) {
         this.studentId=studentId;
         this.amount=fine;

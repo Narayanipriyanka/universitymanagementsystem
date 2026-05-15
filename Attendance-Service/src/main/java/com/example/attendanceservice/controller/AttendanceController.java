@@ -4,6 +4,7 @@ import com.example.attendanceservice.entity.Attendance;
 import com.example.attendanceservice.entity.AttendanceReport;
 import com.example.attendanceservice.servcie.AttendanceService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/attendance")
+@Tag(name="University Attendance controller",description = "faculty can add attednance daily here,gives attednance of faculty in amonth")
 public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;

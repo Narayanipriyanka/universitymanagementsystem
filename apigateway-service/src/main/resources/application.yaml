@@ -121,7 +121,7 @@ spring:
           filters:
             - TokenRelay
         - id: course-docs
-          uri: http://localhost:8099
+          uri: http://localhost:8098
           predicates:
             - Path=/v3/api-docs/course
           filters:

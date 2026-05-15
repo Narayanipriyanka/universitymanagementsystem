@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Long> {
-    List<Course> findByStudentId(UUID studentId);
+    List<Course> findByStudentsId(UUID studentId);
 
     Course findByCourseCode(String courseCode);
 }

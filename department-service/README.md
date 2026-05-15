@@ -17,6 +17,8 @@ department-service running on :8086
 key cloak running on 8080
 kafka running on 9092
 
+# purpose
+add department,program,get department details,add budget to departemnt,allcoate resources based on budget
 ## setup
 to access any of the api presnt in the department service
 one must click on authorize symbol in the swagger and login

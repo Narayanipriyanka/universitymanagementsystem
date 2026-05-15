@@ -8,7 +8,9 @@ public class ExamFeePaidEvent {
     private String programCode;
     private Integer semester;
     private Boolean feePaid;
+public ExamFeePaidEvent(){
 
+}
     public ExamFeePaidEvent(UUID studentId, String program, Integer semester, String courseCode) {
     this.studentId=studentId;
     this.courseCode=courseCode;

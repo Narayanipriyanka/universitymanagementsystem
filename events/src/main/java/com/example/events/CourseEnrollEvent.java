@@ -7,7 +7,9 @@ public class CourseEnrollEvent {
     private String courseCode;
     private List<UUID> studentIds;
     private Integer semester;
+public CourseEnrollEvent(){
 
+}
     public CourseEnrollEvent(String courseCode, Integer sem, List<UUID> studentid) {
     this.courseCode=courseCode;
     this.semester=sem;
@@ -38,6 +40,6 @@ public class CourseEnrollEvent {
     }
 
 
-    public CourseEnrollEvent() {}
+
 
 }

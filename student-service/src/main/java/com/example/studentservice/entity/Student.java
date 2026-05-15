@@ -1,5 +1,6 @@
 package com.example.studentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.util.UUID;
 @Entity
 public class Student {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String firstName;
     private String lastName;
@@ -23,16 +24,12 @@ public class Student {
     private String photoPath;
     @Enumerated(EnumType.STRING)
     private StudentIDcardStatus status;
-    @OneToMany(mappedBy = "parent",cascade= CascadeType.ALL,orphanRemoval=true)
+    @OneToMany(mappedBy = "student",cascade= CascadeType.ALL,orphanRemoval=true)
     private List<Parent> parents;
     @Enumerated(EnumType.STRING)
     private StudentStatus studentStatus;
-    @ManyToMany
-    @JoinTable(
-            name = "student_courses",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
+    @ManyToMany(mappedBy = "students")
+    @JsonBackReference
     private List<Course> courses;
     public StudentStatus getStudentStatus() {
         return studentStatus;

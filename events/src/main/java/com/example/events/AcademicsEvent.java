@@ -10,6 +10,9 @@ public class AcademicsEvent {
     private String grade;
     private Double marks;
     private Boolean isPass;
+    public AcademicsEvent(){
+
+    }
     public AcademicsEvent(UUID studentId, String subject, String programCode, Double marks, Integer semester, String grade, Boolean isPass) {
     this.grade=grade;
     this.studentId=studentId;

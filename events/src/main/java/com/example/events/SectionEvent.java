@@ -5,7 +5,9 @@ public class SectionEvent {
     private String room;
     private String courseCode;
     private Integer capacity;
+public SectionEvent(){
 
+}
     public SectionEvent(Long sectionId, Integer capacity, String room, String courseCode) {
         this.sectionId=sectionId;
         this.room=room;

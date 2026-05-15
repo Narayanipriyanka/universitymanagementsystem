@@ -2,9 +2,10 @@ package com.example.analyticsreportservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.EnableKafka;
 
 @SpringBootApplication
-@EnableFeignClients
+@EnableKafka
 public class AnalyticsreportServiceApplication {
 
     public static void main(String[] args) {

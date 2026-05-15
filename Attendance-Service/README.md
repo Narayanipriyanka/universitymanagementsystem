@@ -17,6 +17,9 @@ Attedance-service running on :8087
 key cloak running on 8080
 kafka running on 9092
 
+## depends on
+faculty-servcie -for faculty details
+
 ## setup
 to access any of the api presnt in the Attendance service
 one must click on authorize symbol in the swagger and login

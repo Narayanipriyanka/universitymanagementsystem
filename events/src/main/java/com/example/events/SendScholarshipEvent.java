@@ -8,8 +8,9 @@ public class SendScholarshipEvent {
     this.email=email;
     this.status=status;
     }
+public SendScholarshipEvent(){
 
-
+}
 
     public String getEmail() {
         return email;

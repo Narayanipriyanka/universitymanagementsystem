@@ -10,6 +10,9 @@ public class BookReturnAlert {
     private String bookName;
     private Double fine;
     private Long daysLeft;
+    public BookReturnAlert(){
+
+    }
     public BookReturnAlert(UUID studentId, LocalDate returnDate, LocalDate issueDate, Double fine, String bookName, long daysLeft) {
     this.studentId=studentId;
     this.fine=fine;

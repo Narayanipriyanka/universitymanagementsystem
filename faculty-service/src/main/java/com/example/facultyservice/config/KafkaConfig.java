@@ -2,6 +2,7 @@ package com.example.facultyservice.config;
 
 import com.example.events.CourseEvent;
 import com.example.events.DepartmentEvent;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.kafka.support.serializer.JsonSerializer;import com.example.events.RegisterRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -20,6 +21,23 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConfig {
+    @Bean
+    public NewTopic facultyCourseTopic(){
+        return new NewTopic("facultyCourse",1,(short) 1);
+    }
+    @Bean
+    public NewTopic paySlipTopic(){
+        return new NewTopic("sendPaySlip",1,(short) 1);
+    }
+    @Bean
+    public NewTopic facultyCreatedTopic(){
+        return new NewTopic("sendFacultyCreated",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendOfficeHoursTopic(){
+        return new NewTopic("sendOfficeHours",1,(short) 1);
+    }
+
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> config = new HashMap<>();

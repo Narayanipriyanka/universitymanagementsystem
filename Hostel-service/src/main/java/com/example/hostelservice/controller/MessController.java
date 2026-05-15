@@ -25,13 +25,13 @@ public class MessController {
   }
     @PostMapping("/meal")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "add mess to hostel",description = "Only for admin ,he can add a mess")
+    @Operation(summary = "add meal plan",description = "Only for admin ,he can add a meal plan")
     public String addMealPlan(@RequestParam Long messId,@RequestParam MealType type){
         return hostelService.addMealPLan(messId,type);
     }
 @PutMapping("/selectMess")
 @PreAuthorize("hasRole('STUDENT')")
-@Operation(summary = "add mess to hostel",description = "Only for admin ,he can add a mess")
+@Operation(summary = "select mess to hostel",description = "Only for studnet ,he can selct a mess")
 public String selectMess(@RequestParam UUID studentId,@RequestBody MessDTO dto){
     return hostelService.selectAMess(studentId,dto);
 }

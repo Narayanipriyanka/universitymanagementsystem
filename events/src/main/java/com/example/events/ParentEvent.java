@@ -8,7 +8,9 @@ public class ParentEvent {
     private String email;
     private String relation;
     private String phone;
+public ParentEvent(){
 
+}
     public ParentEvent(String email, UUID id, String parentName, String phone, String relation) {
     this.email=email;
     this.name=parentName;

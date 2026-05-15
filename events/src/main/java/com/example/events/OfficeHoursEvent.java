@@ -8,6 +8,9 @@ public class OfficeHoursEvent {
     private LocalTime loginTime;
     private LocalTime logoutTime;
     private LocalTime liesurePeriod;
+    public OfficeHoursEvent(){
+
+    }
     public OfficeHoursEvent(UUID facultyId, LocalTime loginTime, LocalTime logoutTime, LocalTime liesurePeriod) {
     this.facultyId=facultyId;
     this.loginTime=loginTime;

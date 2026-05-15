@@ -4,6 +4,7 @@ import com.example.studentservice.dto.StudentRegisterDTO;
 import com.example.studentservice.entity.Student;
 import com.example.studentservice.service.IDCardGenerationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +18,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/student/idcard")
+@Tag(name="University Idcard services Controller ")
 public class IDCardController {
     @Autowired
     private IDCardGenerationService service;
     @PostMapping(path = "/apply", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('STUDENT')")
     @Operation(summary = "apply for idcard ", description = "after registration student should apply for id card with photo ready for applying  ")
-    public ResponseEntity<String> applyForIDcard(@RequestParam UUID studentID,
-                                                 @RequestParam String fullname,
-                                                 @RequestParam String fatherName,
-                                                 @RequestParam String email,
-                                                 @RequestParam String gender,
-                                                 @RequestParam String address,
-                                                 @RequestParam String bloodGroup,
-                                                 @RequestParam String phone,
-                                                 @RequestParam MultipartFile photo) throws IOException {
+    public ResponseEntity<String> applyForIDcard(@RequestParam UUID studentID,@RequestParam String fullname,@RequestParam String fatherName, @RequestParam String email, @RequestParam String gender, @RequestParam String address, @RequestParam String bloodGroup, @RequestParam String phone, @RequestParam MultipartFile photo) throws IOException {
         String response = service.applyForIDCard(studentID,fullname,fatherName,email,gender,address,bloodGroup,phone,photo);
         return ResponseEntity.ok(response);
     }

@@ -10,6 +10,7 @@ import com.example.analyticsreportservice.service.CourseCompleteReportService;
 import com.example.analyticsreportservice.service.FeeAnalyticsService;
 import com.example.analyticsreportservice.service.StudentPerformanceService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/analytics")
+@Tag(name="University Analytics and report controller",description = "gives fee collection rates,student  performance reports ,department iwse student perofeance,course completion rates")
 public class AnalyticsController {
     @Autowired
     private FeeAnalyticsService feeAnalyticsService;

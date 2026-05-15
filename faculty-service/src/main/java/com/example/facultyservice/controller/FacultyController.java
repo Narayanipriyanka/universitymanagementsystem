@@ -4,10 +4,7 @@ import com.example.facultyservice.dto.FacultyProfileDTO;
 import com.example.facultyservice.dto.PaySlipDTO;
 import com.example.facultyservice.dto.QualificationDto;
 import com.example.facultyservice.dto.ReviewDTO;
-import com.example.facultyservice.entity.Department;
-import com.example.facultyservice.entity.Faculty;
-import com.example.facultyservice.entity.OfficeHours;
-import com.example.facultyservice.entity.Reviews;
+import com.example.facultyservice.entity.*;
 import com.example.facultyservice.service.FacultyService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,6 +58,7 @@ public class FacultyController {
     }
     @PutMapping("/profile")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "update profile of a faculty", description = "only for admin admin can update proile for a particular faculty here ")
     public String updateProfile(@RequestBody FacultyProfileDTO dto){
         return facultyService.updateProfile(dto);
     }
@@ -116,6 +114,18 @@ public class FacultyController {
     @Operation(summary = "add payslip to a faculty", description = "only an admin can genertae payslips for a month to a faculty here")
     public String addPayslip(@RequestBody PaySlipDTO dto){
         return facultyService.addPaySlip(dto);
+    }
+    @GetMapping("/pending")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "get pending courses which are not allcoated to any faculty", description = "only admin cna get the pending courses list here so that he can allcoate them to anyone  ")
+    public List<Course> getPendingCourses() {
+        return facultyService.getPendingCourses();
+    }
+    @PostMapping("/payroll")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "add payslip to a faculty", description = "only an admin can genertae payslips for a month to a faculty here")
+    public String addCourseToFaculty(@RequestParam Long courseId,@RequestParam UUID facultyId){
+        return facultyService.addCourseToFaculty(facultyId,courseId);
     }
 
 }

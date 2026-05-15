@@ -7,7 +7,9 @@ public class FacultyCreatedEvent {
     private String email;
     private String username;
     private String password;
+public FacultyCreatedEvent(){
 
+}
     public FacultyCreatedEvent(UUID facultyId,String email, String username, String password) {
         this.facultyId=facultyId;this.email=email;
         this.username=username;

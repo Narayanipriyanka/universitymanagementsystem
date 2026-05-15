@@ -3,6 +3,7 @@ package com.example.timtableservice.controller;
 import com.example.timtableservice.dto.RoomDTO;
 import com.example.timtableservice.service.TimeTableService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/timetable")
+@Tag(name = "University TimeTable and classroom controller")
 public class TimeTableController {
     @Autowired
     private TimeTableService timeTableService;

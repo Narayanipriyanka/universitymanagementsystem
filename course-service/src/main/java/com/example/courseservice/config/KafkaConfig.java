@@ -24,6 +24,20 @@ public class KafkaConfig {
     public NewTopic departmentTopic(){
         return new NewTopic("courses",1,(short) 1);
     }
+    @Bean
+    public NewTopic syllabusTopic(){
+        return new NewTopic("sendSyllabus",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendMaterialTopic(){
+        return new NewTopic("sendMaterial",1,(short) 1);
+    }
+    @Bean
+    public NewTopic sendSectionsTopic(){
+        return new NewTopic("sendSections",1,(short) 1);
+    }
+
+
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {

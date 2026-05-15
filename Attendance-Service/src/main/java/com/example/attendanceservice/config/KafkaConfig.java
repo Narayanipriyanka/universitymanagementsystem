@@ -24,12 +24,16 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
     @Bean
-    public NewTopic departmentTopic(){
+    public NewTopic lowAttendanceTopic(){
         return new NewTopic("lowAttendance",1,(short) 1);
     }
     @Bean
     public NewTopic leaveTopic(){
         return new NewTopic("leave",1,(short) 1);
+    }
+    @Bean
+    public NewTopic attendanceTopic(){
+        return new NewTopic("sendAttendance",1,(short) 1);
     }
     @Bean
     public ProducerFactory<String,Object> producerFactory() {

@@ -9,7 +9,8 @@ public class CourseEvent {
     private String code;
     private String deptCode;
     private Long credits;
-
+    public CourseEvent() {
+    }
     public CourseEvent(String code, String departmentCode, Long credits, String name, Integer sem, String programCode) {
     this.courseName=name;
     this.credits=credits;
