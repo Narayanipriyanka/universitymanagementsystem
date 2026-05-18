@@ -1,14 +1,11 @@
 package com.example.facultyservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.sql.Time;
+
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -18,17 +15,11 @@ public class OfficeHours {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID facultyId;
-    @Schema(type = "string", example = "09:00 AM")
-    @JsonFormat(pattern = "hh:mm a")
-    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @Schema(type = "string", example = "09:00:00")
     private LocalTime loginTime;
-    @Schema(type = "string", example = "09:00 AM")
-    @JsonFormat(pattern = "hh:mm a")
-    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @Schema(type = "string", example = "17:00:00")
     private LocalTime logoutTime;
-    @Schema(type = "string", example = "09:00 AM")
-    @JsonFormat(pattern = "hh:mm a")
-    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @Schema(type = "string", example = "11:00:00")
     private LocalTime liesurePeriod;
     public LocalTime getLiesurePeriod() {
         return liesurePeriod;

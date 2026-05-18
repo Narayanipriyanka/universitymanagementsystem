@@ -8,6 +8,7 @@ import com.example.hostelservice.dto.VisitorDTO;
 import com.example.hostelservice.entity.*;
 import com.example.hostelservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,10 @@ public class HostelService {
     @Autowired
     private MealRepsoitory mealRepsoitory;
     @Autowired
+    private VisitorLogsRepository visitorLogsRepository;
+    @Autowired
     private RoomAllocationRepository allocationRepository;
     private final KafkaTemplate<String,Object> kafkaTemplate;
-@Autowired
-private VisitorLogsRepository visitorLogsRepository;
-
     public HostelService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -53,9 +53,10 @@ private VisitorLogsRepository visitorLogsRepository;
         roomRepository.save(h);
         return "room added successfully to"+hostel.getId()+hostel.getType()+"hostel";
     }
-    public Integer getAvailableRooms(HostelType type){
-        List<Hostel> hostels=hostelRepository.findByType(type);
+    public List<Room> getAvailableRooms(HostelType type){
+        List<Hostel> hostels=hostelRepository.findAllByType(type);
         List<Room> total=new ArrayList<>();
+        List<Room> totalAvailale=new ArrayList<>();
         Integer available=0;
         for(Hostel h:hostels){
         List<Room> rooms=h.getRooms();
@@ -64,12 +65,16 @@ private VisitorLogsRepository visitorLogsRepository;
         for(Room r:total){
             if(r.getNoOfBeds()-r.getFilledCount()>0){
                 available=available+1;
+                totalAvailale.add(r);
             }
         }
-        return available;
+        return totalAvailale;
+    }
+    public List<Hostel> getListOfHostels(HostelType type){
+        return hostelRepository.findAllByType(type);
     }
     public String getFilledCount(HostelType type){
-        List<Hostel> hostels=hostelRepository.findByType(type);
+        List<Hostel> hostels=hostelRepository.findAllByType(type);
         List<Room> total=new ArrayList<>();
         Integer filled=0;
         Integer all=0;

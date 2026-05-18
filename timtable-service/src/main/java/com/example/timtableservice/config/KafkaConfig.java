@@ -39,7 +39,7 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory());
     }
     @Bean
-    public ConsumerFactory<String, RegisterRequest> consumerFactory() {
+    public ConsumerFactory<String,Object> consumerFactory() {
 
         Map<String, Object> props = new HashMap<>();
 
@@ -47,7 +47,7 @@ public class KafkaConfig {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "student-group");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        JsonDeserializer<RegisterRequest> deserializer = new JsonDeserializer<>(RegisterRequest.class, false);
+        JsonDeserializer<Object> deserializer = new JsonDeserializer<>(Object.class);
 
         deserializer.addTrustedPackages("com.example.events");
 
@@ -56,9 +56,9 @@ public class KafkaConfig {
     }
 
     @Bean(name = "kafkaListenerContainerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, RegisterRequest> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String,Object> kafkaListenerContainerFactory() {
 
-        ConcurrentKafkaListenerContainerFactory<String, RegisterRequest> factory =
+        ConcurrentKafkaListenerContainerFactory<String,Object> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory());

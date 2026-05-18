@@ -53,7 +53,7 @@ public String selectMess(@RequestParam UUID studentId,@RequestBody MessDTO dto){
     public String dropMealPlan(UUID studentId,Long mealId){
         return hostelService.dropFromMealPlan(studentId,mealId);
     }
-    @GetMapping
+    @GetMapping("/noOfstudentsInMeal")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "get no of students in veg or non veg plans",description = "only admin cna access this ,gets info about nof students eatuing veg ro non veg in mess")
     public String getNonVegOrVegSTudents(MessType type){

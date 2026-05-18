@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,9 @@ private final KafkaTemplate<String,Object> kafkaTemplate;
     e.setCourseCode(dto.getCourseCode());
     e.setSem(dto.getSemester());
     List<UUID> ids=e.getStudentid();
+    if (ids == null) {
+            ids = new ArrayList<>();
+        }
     ids.add(dto.getStudentId());
     e.setStudentid(ids);
     e.setDeadline(LocalDate.now().plusDays(7));

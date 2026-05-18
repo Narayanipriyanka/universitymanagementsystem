@@ -14,7 +14,7 @@ public class MaintananceRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private UUID studentId;
-    private String issueIn;
+    private String issueType;
     private String description;
     private LocalDate issueDate;
     private MaintananceStatus status;
@@ -47,12 +47,12 @@ public class MaintananceRequest {
         this.description = description;
     }
 
-    public String getIssueIn() {
-        return issueIn;
+    public String getIssueType() {
+        return issueType;
     }
 
-    public void setIssueIn(String issueIn) {
-        this.issueIn = issueIn;
+    public void setIssueType(String issueType) {
+        this.issueType = issueType;
     }
 
     public UUID getStudentId() {

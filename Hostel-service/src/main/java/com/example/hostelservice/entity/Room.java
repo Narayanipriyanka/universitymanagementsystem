@@ -1,5 +1,6 @@
 package com.example.hostelservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +12,7 @@ public class Room {
     private Integer noOfBeds;
     private Integer filledCount;
     @ManyToOne
+    @JsonIgnore
     private Hostel hostel;
 
     public HostelType getType() {

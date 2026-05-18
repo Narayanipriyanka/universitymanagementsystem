@@ -1,5 +1,6 @@
 package com.example.facultyservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class Course {
     private String deptCode;
     @ManyToOne
     @JoinColumn(name = "faculty_id")
+    @JsonIgnore
     private Faculty faculty;
     @Enumerated
     private CourseAllocationStatus status;

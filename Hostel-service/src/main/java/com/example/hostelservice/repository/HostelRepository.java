@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface HostelRepository extends JpaRepository<Hostel,Long> {
     List<Hostel> findByType(HostelType type);
+
+    List<Hostel> findAllByType(HostelType type);
 }

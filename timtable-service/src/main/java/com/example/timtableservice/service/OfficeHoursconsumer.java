@@ -23,7 +23,7 @@ public class OfficeHoursconsumer {
         o.setLiesurePeriod(officeHoursEvent.getLiesurePeriod());
         o.setLoginTime(officeHoursEvent.getLoginTime());
         o.setLogoutTime(officeHoursEvent.getLogoutTime());
-
+        officeHourRepository.save(o);
     }
     @KafkaListener(topics = "facultyCourse",groupId = "faculty-course-group")
     public void cosumeFacultyCourse(FacultyCourseEvent dto){

@@ -11,5 +11,5 @@ import java.util.List;
 public interface MaintananceRequestRepository extends JpaRepository<MaintananceRequest,Long> {
     List<MaintananceRequest> findAllByStatus(MaintananceStatus maintananceStatus);
 
-    List<MaintananceRequest> findAllByIssueIn(String issueIn);
+    List<MaintananceRequest> findAllByIssueType(String issueType);
 }

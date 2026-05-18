@@ -1,5 +1,4 @@
-package com.example.enrollmentservice.config;
-
+package com.example.hostelservice.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -21,10 +20,6 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConfig {
-    @Bean
-    public NewTopic departmentTopic(){
-        return new NewTopic("enrollments",1,(short) 1);
-    }
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {

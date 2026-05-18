@@ -18,7 +18,7 @@ public class MaintananceService {
         MaintananceRequest request=new MaintananceRequest();
         request.setDescription(dto.getDescription());
         request.setIssueDate(LocalDate.now());
-        request.setIssueIn(dto.getIssueIn());
+        request.setIssueType(dto.getIssueIn());
         request.setStatus(MaintananceStatus.PENDING);
         request.setStudentId(dto.getStudentId());
         maintananceRequestRepository.save(request);
@@ -29,7 +29,7 @@ public class MaintananceService {
        return requests;
     }
     public String solveMaintanaceIssue(String issueIn){
-        List<MaintananceRequest> request=maintananceRequestRepository.findAllByIssueIn(issueIn);
+        List<MaintananceRequest> request=maintananceRequestRepository.findAllByIssueType(issueIn);
         String descripition=new String();
         for(MaintananceRequest r:request){
             r.setStatus(MaintananceStatus.COMPLETED);

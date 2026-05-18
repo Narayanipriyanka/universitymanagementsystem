@@ -14,7 +14,6 @@ public class TranscriptDTO {
 
     public TranscriptDTO(UUID studentId, List<AcademicsRecord> records, double cgpa) {
         this.studentId=studentId;
-        this.studentName=firstName;
         this.records=records;
         this.cgpa=cgpa;}
 

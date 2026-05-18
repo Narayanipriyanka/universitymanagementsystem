@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
+@Table(name = "leave_requests")
 public class Leave {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

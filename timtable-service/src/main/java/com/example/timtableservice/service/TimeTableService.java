@@ -62,40 +62,52 @@ public class TimeTableService {
     }
     public String classScheduling(){
         List<FacultyCourse> f=facultyCourseRepository.findAll();
+        System.out.println("Faculty count = " + f.size());
         StringBuilder scheduled= new StringBuilder(" ");
         for(FacultyCourse facultyCourse:f) {
             scheduled.append(" Faculty Name:").append(facultyCourse.getFacultyName()).append(" facultyId:").append(facultyCourse.getFacultyId());
             OfficeHour officeHour = officeHourRepository.findByFacultyId(facultyCourse.getFacultyId());
+            if (officeHour == null) {
+                scheduled.append("\nNo office hours found");
+                continue;
+            }
             List<ClassRoom> c = classRoomRepository.findAllByProgramAndDept(facultyCourse.getProgramCode(), facultyCourse.getDeptCode());
+            if (c.isEmpty()) {
+                scheduled.append("\nNo rooms available");
+                continue;
+            }
             LocalTime nextPeriod = officeHour.getLoginTime();
-            for (ClassRoom classRoom : c) {
+            while (nextPeriod.isBefore(officeHour.getLogoutTime())) {
+                if (nextPeriod.equals(officeHour.getLiesurePeriod())) {
+                    nextPeriod = nextPeriod.plusHours(1);
+                    continue;
+                }
+                boolean assigned = false;
+                for (ClassRoom classRoom : c) {
                 Boolean allocated = facultyClassRoomRepository.existsByRoomNoAndStartTime(classRoom.getRoomNo(), nextPeriod);
-                if (nextPeriod.isAfter(officeHour.getLogoutTime())) {
+                    if (!allocated) {
+                        FacultyClassRoom facultyClassRoom = new FacultyClassRoom();
+                        facultyClassRoom.setFacultyId(facultyCourse.getFacultyId());
+                        facultyClassRoom.setFacultyName(facultyCourse.getFacultyName());
+                        facultyClassRoom.setCourse(facultyCourse.getCourseCode());
+                        facultyClassRoom.setRoomNo(classRoom.getRoomNo());
+                        facultyClassRoom.setStartTime(nextPeriod);
+                        facultyClassRoom.setEndTime(nextPeriod.plusHours(1));
+                        facultyClassRoomRepository.save(facultyClassRoom);
+                        scheduled.append("\nRoom: " + classRoom.getRoomNo() + " Time: " + facultyClassRoom.getStartTime() + " - " + facultyClassRoom.getEndTime());
+                        assigned = true;
+                        break;
+                    }
+                }
+
+                nextPeriod = nextPeriod.plusHours(1);
+
+                if (assigned) {
                     break;
-                }
-                if(officeHour.getLiesurePeriod().equals(nextPeriod)){
-                    nextPeriod = nextPeriod.plusMinutes(60);
-                    continue;
-                }
-                if(allocated){
-                    continue;
-                }
-                if (officeHour.getLiesurePeriod() != nextPeriod) {
-                    FacultyClassRoom facultyClassRoom = new FacultyClassRoom();
-                    facultyClassRoom.setFacultyId(facultyCourse.getFacultyId());
-                    facultyClassRoom.setStartTime(nextPeriod);
-                    facultyClassRoom.setRoomNo(classRoom.getRoomNo());
-                    facultyClassRoom.setFacultyName(facultyCourse.getFacultyName());
-                    nextPeriod = nextPeriod.plusMinutes(60);
-                    facultyClassRoom.setEndTime(nextPeriod);
-                    facultyClassRoom.setCourse(facultyCourse.getCourseCode());
-                    facultyClassRoomRepository.save(facultyClassRoom);
-                    scheduled.append("\nclass Room:").append(classRoom.getRoomNo()).append(" class timings:").append(facultyClassRoom.getStartTime()).append("to").append(facultyClassRoom.getEndTime());
-                } else {
-                    nextPeriod = nextPeriod.plusMinutes(60);
                 }
             }
         }
+
         return scheduled.toString();
 
     }

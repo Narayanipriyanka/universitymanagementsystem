@@ -45,6 +45,7 @@ public class CourseService {
      kafkaTemplate.send("courses",dto);
      return "course added successfully";
     }
+
     public List<Course> getCoursesOFSem(Integer sem){
         List<Course> courses=courseRepository.findBySem(sem);
         return courses;
@@ -95,8 +96,7 @@ public String addSection(SectionDTO dto){
 
 }
 public List<Sections> getSectionsByCourse(String code){
-        List<Sections> s=sectionRepository.findAllByCourseCode(code);
-        return s;
+    return sectionRepository.findAllByCourseCode(code);
 }
 
 }

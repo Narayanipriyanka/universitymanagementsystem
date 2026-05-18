@@ -3,7 +3,9 @@ package com.example.hostelservice.controller;
 import com.example.hostelservice.dto.HostelDTO;
 import com.example.hostelservice.dto.RoomDTO;
 import com.example.hostelservice.dto.VisitorDTO;
+import com.example.hostelservice.entity.Hostel;
 import com.example.hostelservice.entity.HostelType;
+import com.example.hostelservice.entity.Room;
 import com.example.hostelservice.service.HostelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,6 +22,12 @@ import java.util.UUID;
 public class HostelController {
     @Autowired
     private HostelService hostelService;
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "get list of hostels",description = "Only for admin he can add a hostel ")
+    public List<Hostel> getHostel(@RequestParam HostelType hostelType){
+        return hostelService.getListOfHostels(hostelType);
+    }
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "add hostel",description = "Only for admin he can add a hostel ")
@@ -34,7 +43,7 @@ public class HostelController {
     @GetMapping("/availableRooms")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "all available rooms in hostel",description = "Only admin get all the available rooms automatically")
-    public Integer getAvailableRooms(@RequestParam HostelType type){
+    public List<Room> getAvailableRooms(@RequestParam HostelType type){
         return hostelService.getAvailableRooms(type);
     }
     @GetMapping("/filled")

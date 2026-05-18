@@ -121,11 +121,11 @@ public class FacultyController {
     public List<Course> getPendingCourses() {
         return facultyService.getPendingCourses();
     }
-    @PostMapping("/payroll")
+    @PostMapping("/course")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "add payslip to a faculty", description = "only an admin can genertae payslips for a month to a faculty here")
-    public String addCourseToFaculty(@RequestParam Long courseId,@RequestParam UUID facultyId){
-        return facultyService.addCourseToFaculty(facultyId,courseId);
+    public String addCourseToFaculty(@RequestParam String courseCode,@RequestParam UUID facultyId){
+        return facultyService.addCourseToFaculty(facultyId,courseCode);
     }
 
 }

@@ -47,6 +47,8 @@ private CourseRepository courseRepository;
         faculty.setEmail(request.getEmail());
         faculty.setGender(request.getGender());
         faculty.setPhoneNum(request.getPhoneNum());
+        faculty.setUsername(request.getUsername());
+        faculty.setPassword(request.getPassword());
         facultyRepository.save(faculty);
         FacultyCreatedEvent dto=new FacultyCreatedEvent(faculty.getId(),faculty.getEmail(),faculty.getUsername(),faculty.getPassword());
         kafkaTemplate.send("sendFacultyCreated",dto);
@@ -122,7 +124,7 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
         return "qualification added successfully to faculty"+f.getFirstname();
     }
     public String addOfficeHours(OfficeHours hours){
-        officeHoursRepository.save(hours);
+       hours.setId(null); officeHoursRepository.save(hours);
         OfficeHoursEvent dto=new OfficeHoursEvent(hours.getFacultyId(),hours.getLoginTime(),hours.getLogoutTime(),hours.getLiesurePeriod());
         kafkaTemplate.send("sendOfficeHours",dto);
         return "office hours added successfully for"+hours.getFacultyId();
@@ -196,13 +198,13 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
     public List<Course> getPendingCourses(){
         return courseRepository.findAllByStatus(CourseAllocationStatus.PENDING);
     }
-    public String addCourseToFaculty(UUID facultyId,Long courseId){
+    public String addCourseToFaculty(UUID facultyId,String courseCode){
         Faculty f=facultyRepository.findById(facultyId).orElseThrow(()->new RuntimeException("no faculty found with this id"));
-       Course c=courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("no course found with this id"));
+       Course c=courseRepository.findByCourseCode(courseCode).orElseThrow(()->new RuntimeException("no course found with this id"));
        c.setFaculty(f);
        c.setStatus(CourseAllocationStatus.ALLOCATED);
        courseRepository.save(c);
-       FacultyCourseEvent e=new FacultyCourseEvent(facultyId,f.getFirstname(),courseId,c.getProgram(),c.getSemester(),c.getDeptCode(),c.getCourseCode());
+       FacultyCourseEvent e=new FacultyCourseEvent(facultyId,f.getFirstname(),c.getId(),c.getProgram(),c.getSemester(),c.getDeptCode(),c.getCourseCode());
        kafkaTemplate.send("facultyCourse",e);
        return "course "+c.getCourseName()+" is allocated to "+f.getFirstname()+"successfully";
     }
