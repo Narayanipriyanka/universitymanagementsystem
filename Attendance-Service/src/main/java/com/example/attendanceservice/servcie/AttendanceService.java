@@ -26,14 +26,12 @@ public class AttendanceService {
     private AttendanceRepository attendanceRepository;
     @Autowired
     private AttendanceReportRepository attendanceReportRepository;
-@Autowired
-private FacultyDetailsRepository facultyDetailsRepository;
-private final KafkaTemplate<String,Object> kafkaTemplate;
-
+    @Autowired
+    private FacultyDetailsRepository facultyDetailsRepository;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
     public AttendanceService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-
     public String addAttendance(){
         String username=getUserName();
         FacultyDetails f=facultyDetailsRepository.findByUsername(username);
@@ -63,7 +61,7 @@ private final KafkaTemplate<String,Object> kafkaTemplate;
         a.setPresent(present);
         a.setAbsent(noOfDays-present);
         a.setTotalDays(noOfDays);
-    attendanceReportRepository.save(a);
+        attendanceReportRepository.save(a);
         return noOfDays-present;
         }
 

@@ -43,6 +43,10 @@ public class FeesService {
         this.razorpayClient = razorpayClient;
     }
     public String addFeeStructure(FeeStructureDTO dto){
+        FeeStructure feeStructure=feeStructureRepository.findByDeptCodeAndProgramCodeAndSemester(dto.getDeptCode(),dto.getProgramCode(),dto.getSemester());
+        if(feeStructure!=null){
+            throw new RuntimeException("fee structure already present for this dept, program in this semester");
+        }
         FeeStructure f=new FeeStructure();
         f.setExamFee(dto.getExamFee());
         f.setRecordsFee(dto.getRecordsFee());

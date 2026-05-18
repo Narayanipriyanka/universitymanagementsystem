@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/swagger-ui.html", "/swagger-ui/**","/v3/api-docs/**", "/webjars/**", "/auth/register").permitAll()
+                        .pathMatchers("/auth/logout","/swagger-ui.html", "/swagger-ui/**","/v3/api-docs/**", "/webjars/**", "/auth/register").permitAll()
                         .anyExchange().authenticated()
                 )
                 .oauth2Login(Customizer.withDefaults())

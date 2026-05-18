@@ -29,6 +29,10 @@ public class ScholarshipService {
     }
     public String applyForScholarship(ScholarshipDTO scholarshipDTO){
         Student s=studentRepository.findById(scholarshipDTO.getStudentId()).orElseThrow(()-> new RuntimeException("no student found with this id"));
+        Scholarship scholarship=scholarshipRepository.findByScholarshipName(scholarshipDTO.getScholarshipName());
+        if(scholarship.getStudent().getId()==scholarshipDTO.getStudentId()){
+           throw new RuntimeException("already appiled for this scholarship ");
+        }
         Scholarship sc=new Scholarship();
         sc.setAmount(scholarshipDTO.getAmount());
         sc.setScholarshipName(scholarshipDTO.getScholarshipName());

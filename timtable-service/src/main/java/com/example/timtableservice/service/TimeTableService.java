@@ -34,6 +34,10 @@ public class TimeTableService {
     }
 
     public String addClassRoom(RoomDTO dto){
+        ClassRoom classRoom=classRoomRepository.findByRoomNo(dto.getRoomNo());
+        if(classRoom!=null){
+            throw new RuntimeException("classroom already present with this room no");
+        }
         ClassRoom c=new ClassRoom();
         c.setBlockNo(dto.getBlockNo());
         c.setFloorNo(dto.getFloorNo());

@@ -1,5 +1,6 @@
 package com.example.departmentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class Department {
     private String hodName;
 @ManyToOne
 @JoinColumn(name="program_id")
+@JsonIgnore
 private Program program;
 
     public Program getProgram() {

@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ScholarshipRepository extends JpaRepository<Scholarship,Long> {
 
     List<Scholarship> findByStudentId(UUID studentId);
+
+    Scholarship findByScholarshipName(String scholarshipName);
 }

@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface FeeStructureRepository extends JpaRepository<FeeStructure,Long> {
     List<FeeStructure> findAllByProgramCode(String programCode);
+
+    FeeStructure findByDeptCodeAndProgramCodeAndSemester(String deptCode, String programCode, Integer semester);
 }

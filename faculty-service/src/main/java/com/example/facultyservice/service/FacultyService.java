@@ -124,6 +124,10 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
         return "qualification added successfully to faculty"+f.getFirstname();
     }
     public String addOfficeHours(OfficeHours hours){
+       OfficeHours officeHours=officeHoursRepository.findByFacultyId(hours.getFacultyId());
+        if(officeHours!=null){
+            throw new RuntimeException("office hour already added for this faculty");
+        }
        hours.setId(null); officeHoursRepository.save(hours);
         OfficeHoursEvent dto=new OfficeHoursEvent(hours.getFacultyId(),hours.getLoginTime(),hours.getLogoutTime(),hours.getLiesurePeriod());
         kafkaTemplate.send("sendOfficeHours",dto);

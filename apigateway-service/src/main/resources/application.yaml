@@ -1,6 +1,5 @@
 server:
   port: 8081
-
 spring:
   application:
     name: api-gateway
@@ -129,15 +128,15 @@ spring:
         - id: enrollment-service
           uri: http://localhost:8092
           predicates:
-            - Path=/enrollment/**
+            - Path=/enrollments/**
           filters:
             - TokenRelay
         - id: enrollment-docs
           uri: http://localhost:8092
           predicates:
-            - Path=/v3/api-docs/enrollment
+            - Path=/v3/api-docs/enrollments
           filters:
-            - RewritePath=/v3/api-docs/enrollment,/v3/api-docs
+            - RewritePath=/v3/api-docs/enrollments,/v3/api-docs
         - id: exam-service
           uri: http://localhost:8096
           predicates:
@@ -233,7 +232,7 @@ springdoc:
       - name: analytics-service
         url: /v3/api-docs/analytics
       - name: enrollment-service
-        url: /v3/api-docs/enrollment
+        url: /v3/api-docs/enrollments
       - name: library-service
         url: /v3/api-docs/library
       - name: feemanagement-service

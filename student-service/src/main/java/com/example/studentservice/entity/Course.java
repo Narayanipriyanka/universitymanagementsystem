@@ -1,5 +1,6 @@
 package com.example.studentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -21,7 +22,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    @JsonManagedReference
+   @JsonIgnore
     private List<Student> students;
     public Integer getSemester() {
         return semester;

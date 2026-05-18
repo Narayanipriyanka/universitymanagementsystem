@@ -1,5 +1,6 @@
 package com.example.studentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Parent {
     private String phone;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
+    @JsonIgnore
     private Student student;
      private String email;
     public String getParentName() {

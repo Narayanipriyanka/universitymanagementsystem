@@ -1,4 +1,5 @@
-package com.example.facultyservice.config;
+package com.example.enrollmentservice.config;
+
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.cors(cors -> {})
+        http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -36,11 +38,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.GET,"/faculty/all").authenticated()
-                        .requestMatchers("/faculty/scholarships/create").hasRole("ADMIN")
-                        .requestMatchers("/faculty/scholarships/status").hasRole("ADMIN")
-                        .requestMatchers("/faculty/idcard/generate/{studentId}").hasRole("ADMIN")
-                        .requestMatchers("/scholarships/student/**").hasAnyRole("STUDENT","ADMIN").anyRequest().authenticated())
+                        .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtConverter()))
                 );
@@ -52,7 +50,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8084", "http://localhost:8081", "http://localhost:8080")
+                        .allowedOrigins("http://localhost:8092", "http://localhost:8081", "http://localhost:8080")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
 
@@ -62,6 +60,7 @@ public class SecurityConfig {
 
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> jwtConverter() {
+
         return new Converter<Jwt, AbstractAuthenticationToken>() {
             @Override
             public AbstractAuthenticationToken convert(Jwt jwt) {
@@ -69,7 +68,9 @@ public class SecurityConfig {
                 Map<String, Object> realmAccess = jwt.getClaim("realm_access");
                 if (realmAccess != null && realmAccess.containsKey("roles")) {
                     List<String> roles = (List<String>) realmAccess.get("roles");
-                    roles.forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase())));
+                    roles.forEach(role ->
+                            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                    );
                 }
                 return new JwtAuthenticationToken(jwt, authorities);
             }
@@ -77,6 +78,10 @@ public class SecurityConfig {
     }
     @Bean
     public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withIssuerLocation("http://localhost:8080/realms/universitymanagementrealm").build();
+        return NimbusJwtDecoder.withIssuerLocation(
+                "http://localhost:8080/realms/universitymanagementrealm"
+        ).build();
     }
 }
+
+

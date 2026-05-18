@@ -1,5 +1,6 @@
 package com.example.examservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.apache.kafka.common.protocol.types.Field;
 
@@ -14,6 +15,7 @@ public class Seat {
     private Boolean isAllocated;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hall_id")
+    @JsonIgnore
     private ExamHall examHall;
 
     public Long getSeatNo() {

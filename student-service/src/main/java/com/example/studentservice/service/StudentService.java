@@ -147,7 +147,10 @@ public String updateStudentStatus(UUID studentId,StudentStatus status){
     public String enrollInCourse(Long courseId,String courseCode){
     Student s=repository.findByUsername(getUserName());
     Course c=courseRepository.findById(courseId).orElseThrow(()->new RuntimeException("no course found with this id"));
-    if(Objects.equals(c.getCourseCode(), courseCode)){
+    if(c.getStudents().contains(s)){
+        throw new RuntimeException("student already enrolled in this course");
+    }
+        if(Objects.equals(c.getCourseCode(), courseCode)){
         List<Student> students=c.getStudents();
         students.add(s);
         c.setStudents(students);

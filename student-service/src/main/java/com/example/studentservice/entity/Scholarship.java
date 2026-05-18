@@ -1,5 +1,6 @@
 package com.example.studentservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class Scholarship {
     private Double amount;
 @ManyToOne
 @JoinColumn(name="student_id")
+@JsonIgnore
 private Student student;
     public Long getId() {
         return id;
