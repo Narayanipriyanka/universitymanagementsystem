@@ -60,56 +60,49 @@ public class TimeTableService {
         classRoomRepository.save(r);
         return "resources allocated succesfully";
     }
-    public String classScheduling(){
-        List<FacultyCourse> f=facultyCourseRepository.findAll();
-        System.out.println("Faculty count = " + f.size());
-        StringBuilder scheduled= new StringBuilder(" ");
-        for(FacultyCourse facultyCourse:f) {
-            scheduled.append(" Faculty Name:").append(facultyCourse.getFacultyName()).append(" facultyId:").append(facultyCourse.getFacultyId());
+    public String classScheduling() {
+        List<FacultyCourse> facultyCourses = facultyCourseRepository.findAll();
+        System.out.println("Faculty count = " + facultyCourses.size());
+        StringBuilder scheduled = new StringBuilder();
+        for (FacultyCourse facultyCourse : facultyCourses) {
+            scheduled.append("\nFaculty Name: ").append(facultyCourse.getFacultyName()).append(" FacultyId: ").append(facultyCourse.getFacultyId());
             OfficeHour officeHour = officeHourRepository.findByFacultyId(facultyCourse.getFacultyId());
             if (officeHour == null) {
                 scheduled.append("\nNo office hours found");
                 continue;
             }
-            List<ClassRoom> c = classRoomRepository.findAllByProgramAndDept(facultyCourse.getProgramCode(), facultyCourse.getDeptCode());
-            if (c.isEmpty()) {
+            List<ClassRoom> rooms = classRoomRepository.findAllByProgramAndDept(facultyCourse.getProgramCode(), facultyCourse.getDeptCode());
+            if (rooms.isEmpty()) {
                 scheduled.append("\nNo rooms available");
                 continue;
             }
+            int roomIndex = 0;
             LocalTime nextPeriod = officeHour.getLoginTime();
-            while (nextPeriod.isBefore(officeHour.getLogoutTime())) {
+            while (nextPeriod.isBefore(officeHour.getLogoutTime()) && roomIndex < rooms.size()) {
                 if (nextPeriod.equals(officeHour.getLiesurePeriod())) {
                     nextPeriod = nextPeriod.plusHours(1);
                     continue;
                 }
-                boolean assigned = false;
-                for (ClassRoom classRoom : c) {
-                Boolean allocated = facultyClassRoomRepository.existsByRoomNoAndStartTime(classRoom.getRoomNo(), nextPeriod);
-                    if (!allocated) {
-                        FacultyClassRoom facultyClassRoom = new FacultyClassRoom();
-                        facultyClassRoom.setFacultyId(facultyCourse.getFacultyId());
-                        facultyClassRoom.setFacultyName(facultyCourse.getFacultyName());
-                        facultyClassRoom.setCourse(facultyCourse.getCourseCode());
-                        facultyClassRoom.setRoomNo(classRoom.getRoomNo());
-                        facultyClassRoom.setStartTime(nextPeriod);
-                        facultyClassRoom.setEndTime(nextPeriod.plusHours(1));
-                        facultyClassRoomRepository.save(facultyClassRoom);
-                        scheduled.append("\nRoom: " + classRoom.getRoomNo() + " Time: " + facultyClassRoom.getStartTime() + " - " + facultyClassRoom.getEndTime());
-                        assigned = true;
-                        break;
-                    }
+                ClassRoom room = rooms.get(roomIndex);
+                boolean roomBusy = facultyClassRoomRepository.existsByRoomNoAndStartTime(room.getRoomNo(), nextPeriod);
+                boolean facultyBusy = facultyClassRoomRepository.existsByFacultyIdAndStartTime(facultyCourse.getFacultyId(), nextPeriod);
+                if (!roomBusy && !facultyBusy) {
+                    FacultyClassRoom schedule = new FacultyClassRoom();
+                    schedule.setFacultyId(facultyCourse.getFacultyId());
+                    schedule.setFacultyName(facultyCourse.getFacultyName());
+                    schedule.setCourse(facultyCourse.getCourseCode());
+                    schedule.setRoomNo(room.getRoomNo());
+                    schedule.setStartTime(nextPeriod);
+                    schedule.setEndTime(nextPeriod.plusHours(1));
+                    facultyClassRoomRepository.save(schedule);
+                    scheduled.append("\nRoom: ").append(room.getRoomNo()).append(" Time: ").append(schedule.getStartTime()).append(" - ").append(schedule.getEndTime());
+                    roomIndex++;
                 }
-
                 nextPeriod = nextPeriod.plusHours(1);
-
-                if (assigned) {
-                    break;
-                }
             }
         }
 
         return scheduled.toString();
-
     }
 
     public String getAvailableHours(UUID facultyId){

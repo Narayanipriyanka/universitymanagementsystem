@@ -17,4 +17,6 @@ public interface FacultyClassRoomRepository extends JpaRepository<FacultyClassRo
     List<FacultyClassRoom> findAllByRoomNo(String roomNo);
 
     List<FacultyClassRoom> findAllByFacultyId(UUID facultyId);
+
+    boolean existsByFacultyIdAndStartTime(UUID facultyId, LocalTime nextPeriod);
 }
