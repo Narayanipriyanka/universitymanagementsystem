@@ -2,6 +2,7 @@ package com.example.notificationcommunicationservice.service;
 
 import com.example.events.*;
 import com.example.facultyservice.entity.Payslip;
+import com.example.notificationcommunicationservice.dto.ParentCommunicationDTO;
 import com.example.notificationcommunicationservice.entity.Circulars;
 import com.example.notificationcommunicationservice.entity.ParentDetails;
 import com.example.notificationcommunicationservice.entity.StudentDetails;
@@ -199,6 +200,15 @@ public class EmailService {
         mailMessage.setFrom(fromEmail);
         mailMessage.setSubject("Hi student,check your Exam Hall and seatNo of Your upcoming Exam here !");
         mailMessage.setText("This is to inform you that ,Your Exam Hall No is"+request.getHallNo() +"\n seat No is:"+request.getSeatNo()+"\n Your Exam Hall is in"+request.getFloorNo()+"st Floor in University Examination Building \n All the best for your exam \n thank you \n university team");
+        mailSender.send(mailMessage);
+    }
+
+    public void sendParentCommunication(String email, ParentCommunicationDTO dto) {
+        SimpleMailMessage mailMessage=new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setFrom(fromEmail);
+        mailMessage.setSubject("Hi Parent,"+dto.getParentName()+dto.getIssue()+" with your son/daughter");
+        mailMessage.setText("dear Parent,"+dto.getParentName()+"This is to inform you that ,"+dto.getDescription()+"for student with studentid"+dto.getStudentId()+"\n thank you \n university team");
         mailSender.send(mailMessage);
     }
 }

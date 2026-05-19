@@ -33,6 +33,10 @@ public class CourseService {
     }
 
     public String addCourse(CourseDTO course){
+        Course course1=courseRepository.findByCode(course.getCode());
+        if(course1!=null){
+            throw new RuntimeException("course already presnt with this course code");
+        }
         Course c=new Course();
         c.setCode(course.getCode());
         c.setCredits(course.getCredits());

@@ -11,6 +11,7 @@ public class Program {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String programCode;
     private Integer duration;
     private Integer nofSems;
     @OneToMany(mappedBy = "program",cascade= CascadeType.ALL,orphanRemoval=true)
@@ -18,6 +19,14 @@ public class Program {
 
     public List<Department> getDepartments() {
         return departments;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public void setDepartments(List<Department> departments) {

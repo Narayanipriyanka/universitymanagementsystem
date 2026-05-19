@@ -35,6 +35,12 @@ public class LibraryService {
     }
 
     public String addBook(BookDTO dto){
+        Book book1=repository.findByBookName(dto.getBookName());
+        if(book1!=null&& Objects.equals(dto.getAuthor(), book1.getAuthor())){
+             book1.setCopies(book1.getCopies()+1);
+             repository.save(book1);
+             return "already book present this is added as another copy of that book";
+        }
         Book book=new Book();
         book.setBookName(dto.getBookName());
         book.setAuthor(dto.getAuthor());

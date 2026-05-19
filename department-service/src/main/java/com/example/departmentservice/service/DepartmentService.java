@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DepartmentService {
@@ -24,8 +25,13 @@ private BudgetRepository budgetRepository;
 @Autowired
 private ResourceRepository resourceRepository;
     public String addProgram(ProgramDTO program) {
-        List<Department> depts=repository.findAllByDeptIdIn(program.getDepartment_ids());
+        Optional<Program> program1=programRepository.findByNameAndProgramCode(program.getName(),program.getProgramCode());
+       if(program1!=null){
+           throw new RuntimeException("programalready exists with this program code");
+       }
+        List<Department> depts=repository.findAllByDepartmentCodeIn(program.getDepartmentCodes());
         Program p=new Program();
+        p.setProgramCode(program.getProgramCode());
         p.setName(program.getName());
         p.setDepartments(depts);
         p.setDuration(program.getDuration());
@@ -37,8 +43,12 @@ private ResourceRepository resourceRepository;
         return programRepository.findAll();
     }
     public String addBudget(BudgetDTO dto){
-        Budget b=new Budget();
         Department d=repository.findByDepartmentCode(dto.getDepCode());
+        Budget budget=budgetRepository.findByDepartment(d);
+        if(budget!=null){
+            throw new RuntimeException("budget already added for this departmnet");
+        }
+        Budget b=new Budget();
         b.setTotalAmount(dto.getTotalAmount());
         b.setUsedAmount(0.00);
         b.setRemainingAmount(dto.getTotalAmount());

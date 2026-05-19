@@ -1,5 +1,6 @@
 package com.example.notificationcommunicationservice.controller;
 
+import com.example.notificationcommunicationservice.dto.ParentCommunicationDTO;
 import com.example.notificationcommunicationservice.entity.Circulars;
 import com.example.notificationcommunicationservice.service.AnnouncementService;
 import com.example.notificationcommunicationservice.service.EmailService;
@@ -24,6 +25,12 @@ public class AnnounceMentController {
     public String addCircular(Circulars circular){
         announceMentService.sendCircular(circular);
         return "circular send to everyone";
+    }
+    @PostMapping("/parentcommunication")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "only admin can send mails to parent regarding any issue with student here")
+    public String communicate(ParentCommunicationDTO dto){
+       return announceMentService.parentCommunication(dto);
     }
 
 }

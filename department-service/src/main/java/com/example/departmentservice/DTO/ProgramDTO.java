@@ -5,15 +5,23 @@ import java.util.UUID;
 
 public class ProgramDTO {
     private String name;
-    private List<UUID> department_ids;
+    private List<String> departmentCodes;
     private Integer duration;
-
+    private String programCode;
     public String getName() {
         return name;
     }
 
-    public List<UUID> getDepartment_ids() {
-        return department_ids;
+    public List<String> getDepartmentCodes() {
+        return departmentCodes;
+    }
+
+    public String getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(String programCode) {
+        this.programCode = programCode;
     }
 
     public Integer getDuration() {
@@ -32,8 +40,8 @@ public class ProgramDTO {
         this.duration = duration;
     }
 
-    public void setDepartment_ids(List<UUID> department_ids) {
-        this.department_ids = department_ids;
+    public void setDepartmentCodes(List<String> departmentCodes) {
+        this.departmentCodes = departmentCodes;
     }
 
     public void setName(String name) {

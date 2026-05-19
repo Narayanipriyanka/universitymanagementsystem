@@ -33,6 +33,10 @@ public class AttendanceService {
         this.kafkaTemplate = kafkaTemplate;
     }
     public String addAttendance(){
+        Attendance attendance=attendanceRepository.findByDate(LocalDate.now());
+        if(attendance!=null){
+            throw new RuntimeException("your attendance is already added for today");
+        }
         String username=getUserName();
         FacultyDetails f=facultyDetailsRepository.findByUsername(username);
         Attendance a=new Attendance();

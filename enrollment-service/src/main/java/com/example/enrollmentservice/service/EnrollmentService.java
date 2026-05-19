@@ -60,9 +60,11 @@ public String dropCourse(String courseCode){
                 studentIds.remove(s.getId());
                 e.setStudentids(studentIds);
                 enrollnmentRepository.save(e);
+                return "course dropped successfully";
             }
+
         }
-        return "course dropped successfully";
+      return "this course is not found in your course list";
 }
 
 public String checkSeatAvailabilityInCourse(String courseCode){

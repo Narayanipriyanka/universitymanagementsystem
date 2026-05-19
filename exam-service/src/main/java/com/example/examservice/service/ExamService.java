@@ -72,6 +72,9 @@ public class ExamService {
                 if(Objects.equals(exam.getDeptCode(), deptCode) && Objects.equals(exam.getProgramCode(), programCode) && Objects.equals(exam.getSemester(), semster)){
                     if(feePaid){
                        ExamRegister examRegister=examRegisterRepository.findByExamName(exam.getExam());
+                        if(examRegister.getStudentIds().contains(studentID)){
+                         throw new RuntimeException("you already registered for this exam");
+                        }
                         examRegister.setExamId(exam.getId());
                         List<UUID> studentIds=examRegister.getStudentIds();
                         studentIds.add(studentID);
@@ -84,6 +87,10 @@ public class ExamService {
             return " exam fee is not paid pay it in exam section ";
     }
     public String addRevaluationForExam(ReevaluationDTO dto){
+        RevaluationRequest revaluationRequest=revaluationRequestRepository.findByExamName(dto.getExamName());
+        if(revaluationRequest!=null){
+            throw new RuntimeException("revalution already added for this exam");
+        }
         RevaluationRequest request=new RevaluationRequest();
         request.setExamName(dto.getExamName());
         request.setDeptCode(dto.getDeptCode());
@@ -96,6 +103,9 @@ public class ExamService {
     }
     public String applyForRevaluation(UUID studentId,Integer semester,String examName,String programName){
         RevaluationRequest r=revaluationRequestRepository.findByExamName(examName);
+        if(r.getStudentId().contains(studentId)){
+            throw new RuntimeException("already applied for revaluation for this exam");
+        }
         if(Objects.equals(r.getProgramCode(), programName) && Objects.equals(r.getSemester(), semester)) {
            List<UUID> studentIds=r.getStudentId();
            studentIds.add(studentId);

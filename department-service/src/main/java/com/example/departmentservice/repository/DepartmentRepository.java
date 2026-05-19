@@ -11,4 +11,6 @@ public interface DepartmentRepository extends JpaRepository<Department, UUID> {
     List<Department> findAllByDeptIdIn(List<UUID> departmentIds);
 
     Department findByDepartmentCode(String depCode);
+
+    List<Department> findAllByDepartmentCodeIn(List<String> departmentCodes);
 }

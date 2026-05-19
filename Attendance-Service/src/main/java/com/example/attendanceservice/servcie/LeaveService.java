@@ -30,6 +30,10 @@ private final KafkaTemplate<String, Object> kafkaTemplate;
     }
 
     public String applyForLeave(LeaveDTO leave){
+        Leave leave1=leaveRepository.findByStartDateAndFacultyID(leave.getStartDate(),leave.getFacultyId());
+        if(leave1!=null){
+            throw new RuntimeException("already applied leave for this date");
+        }
         Leave l=new Leave();
         l.setLeaveReason(leave.getLeaveReason());
         l.setLeaveStatus(LeaveStatus.PENDING);

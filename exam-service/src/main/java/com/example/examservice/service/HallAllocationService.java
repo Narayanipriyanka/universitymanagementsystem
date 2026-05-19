@@ -29,6 +29,10 @@ public class HallAllocationService {
     private KafkaTemplate<String ,Object> kafkaTemplate;
 
     public String addHall(ExamHallDTO dto){
+        ExamHall examHall=hallRepository.findByHallNo(dto.getHallNo());
+        if(examHall!=null){
+            throw new RuntimeException("already a hall present with this hall number");
+        }
         ExamHall hall=new ExamHall();
         hall.setHallNo(dto.getHallNo());
         hall.setFloor(dto.getFloor());

@@ -9,4 +9,6 @@ import java.util.UUID;
 @Repository
 public interface ParentRepository extends JpaRepository<ParentDetails,Long> {
     ParentDetails findByStudentId(UUID studentId);
+
+    ParentDetails findByStudentIdAndName(UUID studentId, String parentName);
 }

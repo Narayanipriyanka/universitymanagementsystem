@@ -100,11 +100,24 @@ FacultyCreatedEvent dto=new FacultyCreatedEvent(s.getId(),data[2],data[8],data[9
     public String addDepartment(UUID facultyId, List<String> deptCode) {
         Faculty f=facultyRepository.findById(facultyId).orElseThrow(()-> new RuntimeException("faculty ot found with this id"));
         List<Department> d=departmentRepository.findByDepartmentCodeIn(deptCode);
-     if(d.isEmpty()){
-         throw new RuntimeException("no departments found with this name");
-     }
-     f.setDepartments(d);
-     facultyRepository.save(f);
+        if(d.isEmpty()){
+            throw new RuntimeException("no departments found with this name");
+        }
+        if(f.getDepartments()==null){
+            f.setDepartments(d);
+            facultyRepository.save(f);
+        }
+        else {
+            List<Department> departmentList = f.getDepartments();
+            for (Department department : d) {
+                if (f.getDepartments().contains(department)) {
+                    throw new RuntimeException(department.getDepartmentCode() + "department already added to " + f.getFirstname());
+                }
+                departmentList.add(department);
+                f.setDepartments(departmentList);
+                facultyRepository.save(f);
+            }
+        }
         return "departments added successfully to "+f.getFirstname();
     }
 

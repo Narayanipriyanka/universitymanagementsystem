@@ -48,8 +48,9 @@ public class HostelService {
         Room h=new Room();
         Hostel hostel=hostelRepository.findById(dto.getHostelId()).orElseThrow(()->new RuntimeException("no hostel found with this id"));
         h.setNoOfBeds(dto.getNoOfBeds());
-     h.setFilledCount(0);
-     h.setHostel(hostel);
+        h.setFilledCount(0);
+        h.setType(dto.getType());
+        h.setHostel(hostel);
         roomRepository.save(h);
         return "room added successfully to"+hostel.getId()+hostel.getType()+"hostel";
     }
